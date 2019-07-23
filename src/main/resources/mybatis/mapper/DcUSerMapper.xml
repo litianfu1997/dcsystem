@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzkj.dcsystem.dao.DcUserMapper">
+
+    <insert id="insertUser" parameterType="DcUser">
+        insert into dc_user(user_id) values (#{userId})
+    </insert>
+</mapper>
