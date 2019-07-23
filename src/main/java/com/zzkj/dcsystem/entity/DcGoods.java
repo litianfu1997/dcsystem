@@ -12,8 +12,8 @@ import lombok.Data;
 public class DcGoods {
     private String goodsId;
     private String goodsName;
-    private float goodsPrice;
-    private int goodsTotal;
-    private String imgUrl;
+    private Float goodsPrice;
+    private Integer goodsTotal;
+    private String goodsImgUrl;
 }
 

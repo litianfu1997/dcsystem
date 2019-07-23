@@ -1,4 +1,4 @@
-package com.zzkj.dcsystem.utils;
+package com.zzkj.dcsystem.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
 import javax.sql.DataSource;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
