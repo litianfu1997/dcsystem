@@ -1,4 +1,4 @@
-package com.demo.dcsystem.dao;
+package com.zzkj.dcsystem.entity;
 
 import lombok.Data;
 

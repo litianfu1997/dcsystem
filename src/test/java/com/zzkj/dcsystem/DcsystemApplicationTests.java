@@ -1,4 +1,4 @@
-package com.demo.dcsystem;
+package com.zzkj.dcsystem;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
