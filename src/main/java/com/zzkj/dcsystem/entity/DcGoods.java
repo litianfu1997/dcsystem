@@ -14,5 +14,6 @@ public class DcGoods {
     private String goodsName;
     private float goodsPrice;
     private int goodsTotal;
+    private String imgUrl;
 }
 
