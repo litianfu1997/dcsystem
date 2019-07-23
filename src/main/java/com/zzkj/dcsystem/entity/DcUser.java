@@ -14,10 +14,10 @@ public class DcUser {
     private String openId;
     private String sessionKey;
     private String nickName;
-    private int gender;
+    private Integer gender;
     private String language;
     private String city;
     private String province;
     private String country;
-    private String avatar;
+    private String avatarUrl;
 }

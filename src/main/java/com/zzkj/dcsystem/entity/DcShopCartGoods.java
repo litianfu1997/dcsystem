@@ -10,8 +10,8 @@ import lombok.Data;
  */
 @Data
 public class DcShopCartGoods {
-    private String shopCartId;
-    private String goodsId;
-    private int amount;
-    private float total;
+    private DcShopCart shopCart;
+    private DcGoods goods;
+    private Integer amount;
+    private Float total;
 }
