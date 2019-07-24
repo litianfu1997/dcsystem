@@ -17,5 +17,6 @@ public class DcGoods {
     private Integer goodsTotal;
     private String goodsDetails;
     private String goodsImgUrl;
+
 }
 

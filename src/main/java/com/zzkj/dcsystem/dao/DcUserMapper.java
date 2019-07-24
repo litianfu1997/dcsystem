@@ -17,4 +17,11 @@ public interface DcUserMapper {
      * @param dcUser 用户实体
      */
     public void insertUser(DcUser dcUser);
+
+    /**
+     * 根据openid查询用户
+     * @param openId 微信穿过来的openid
+     * @return 含有userId的对象
+     */
+    public DcUser selectDcUserByOpenId(String openId);
 }

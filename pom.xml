@@ -17,8 +17,12 @@
     <properties>
         <java.version>1.8</java.version>
     </properties>
-
     <dependencies>
+        <!--日志启动器-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
         <!--thymeleaf模板启动器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -29,12 +33,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
         <!--mybatis启动器-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.0</version>
         </dependency>
+
         <!--数据库驱动-->
         <dependency>
             <groupId>mysql</groupId>
@@ -47,7 +56,18 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.1.8</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
         <!-- druid需要的日志包 -->
         <dependency>
             <groupId>log4j</groupId>
@@ -60,7 +80,12 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
+        <!--json工具-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.7</version>
+        </dependency>
         <!--spring测试包-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
