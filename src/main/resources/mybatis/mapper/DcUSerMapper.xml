@@ -5,6 +5,15 @@
 <mapper namespace="com.zzkj.dcsystem.dao.DcUserMapper">
 
     <insert id="insertUser" parameterType="DcUser">
-        insert into dc_user(user_id) values (#{userId})
+        insert into
+        dc_user(user_id, open_id, nick_name, gender,language, city, province, country, avatar_url)
+        values
+        (#{userId},#{openId},#{nickName},#{gender},#{language},#{city},#{province},#{country},#{avatarUrl})
     </insert>
+
+    <select id="selectDcUserByOpenId" parameterType="String" resultType="DcUser">
+        select user_id userId
+        from dc_user
+        where open_id = #{openid}
+    </select>
 </mapper>
