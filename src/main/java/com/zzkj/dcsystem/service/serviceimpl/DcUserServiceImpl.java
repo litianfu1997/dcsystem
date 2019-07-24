@@ -4,6 +4,8 @@ import com.zzkj.dcsystem.controller.utils.RawData;
 import com.zzkj.dcsystem.dao.DcUserMapper;
 import com.zzkj.dcsystem.entity.DcUser;
 import com.zzkj.dcsystem.service.DcUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class DcUserServiceImpl implements DcUserService {
     @Autowired
     DcUserMapper dcUserMapper;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public DcUser selectDcUserByOpenId(String openId) {
         DcUser user = dcUserMapper.selectDcUserByOpenId(openId);
@@ -48,9 +51,10 @@ public class DcUserServiceImpl implements DcUserService {
             dcUser.setCountry(data.getCountry());
             dcUser.setAvatarUrl(data.getAvatarUrl());
             dcUserMapper.insertUser(dcUser);
+            logger.info("用户插入成功");
         }
         else{
-            System.out.println("用户已存在，不需要插入！！");
+            logger.info("用户已存在");
             //直接返回查询到的userid
             return user.getUserId();
         }

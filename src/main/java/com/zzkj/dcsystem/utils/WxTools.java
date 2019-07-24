@@ -2,6 +2,7 @@ package com.zzkj.dcsystem.utils;
 
 import com.google.gson.Gson;
 import com.zzkj.dcsystem.controller.utils.OpenIdAndSessionKey;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;

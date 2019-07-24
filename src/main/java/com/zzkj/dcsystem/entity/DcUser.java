@@ -12,7 +12,6 @@ import lombok.Data;
 public class DcUser {
     private String userId;
     private String openId;
-    private String sessionKey;
     private String nickName;
     private Integer gender;
     private String language;
