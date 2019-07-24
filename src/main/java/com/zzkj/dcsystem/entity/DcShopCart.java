@@ -11,6 +11,6 @@ import lombok.Data;
 @Data
 public class DcShopCart {
     private String shopCartId;
-    private String userID;
-    private float totalMoney;
+    private DcUser user;
+    private Float totalMoney;
 }
