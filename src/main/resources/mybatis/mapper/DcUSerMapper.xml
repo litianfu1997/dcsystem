@@ -12,8 +12,12 @@
     </insert>
 
     <select id="selectDcUserByOpenId" parameterType="String" resultType="DcUser">
-        select user_id userId
+        select user_id
         from dc_user
         where open_id = #{openid}
+    </select>
+
+    <select id="selectDcUserByUserId" resultType="DcUser" parameterType="String">
+        select user_id from dc_user where user_id = #{userId}
     </select>
 </mapper>

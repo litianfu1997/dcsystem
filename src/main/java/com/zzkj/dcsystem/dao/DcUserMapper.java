@@ -2,6 +2,7 @@ package com.zzkj.dcsystem.dao;
 
 import com.zzkj.dcsystem.entity.DcUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * @author JGZ
@@ -24,4 +25,11 @@ public interface DcUserMapper {
      * @return 含有userId的对象
      */
     public DcUser selectDcUserByOpenId(String openId);
+
+    /**
+     * 根据用户id查询所有的用户信息
+     * @param userId
+     * @return 包含用户的userId
+     */
+    public DcUser selectDcUserByUserId(String userId);
 }
