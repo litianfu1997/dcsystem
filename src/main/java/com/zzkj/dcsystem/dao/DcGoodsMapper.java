@@ -14,6 +14,10 @@ import java.util.List;
  */
 @Mapper
 public interface DcGoodsMapper {
+    /**
+     * 查询所有商品信息
+     * @return
+     */
     @Select("select * from dc_goods")
     List<DcGoods> selectAllGoods();
 }
