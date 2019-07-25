@@ -19,6 +19,7 @@ public class DcOrders {
     private String note;
     private String storeAddress;
     private String userAddress;
+    private DcUser user;
     /**
      * 订单的总价格
      */
