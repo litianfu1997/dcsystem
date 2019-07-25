@@ -32,10 +32,11 @@ import java.util.Map;
 public class DcUserController {
 
     @Autowired
-    DcUserService dcUserService;
+    private DcUserService dcUserService;
     @Autowired
-    StringRedisTemplate stringRedisTemplate;
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private StringRedisTemplate stringRedisTemplate;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value = "/userLogin")
     public ResponseEntity<Map<String, String>> userLogin(String code, String rawData, String signature, String encrypteData, String iv){
@@ -94,6 +95,13 @@ public class DcUserController {
         logger.info("用户:"+userId+" openid:"+openid+" sessionKey:"+sessionKey+" 已缓存");
     }
 
+    public StringRedisTemplate getStringRedisTemplate() {
+        return stringRedisTemplate;
+    }
+
+    public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
+        this.stringRedisTemplate = stringRedisTemplate;
+    }
 
     public DcUserService getDcUserService() {
         return dcUserService;
