@@ -5,6 +5,14 @@ import com.zzkj.dcsystem.dao.DcOrdersMapper;
 import com.zzkj.dcsystem.entity.DcOrders;
 import com.zzkj.dcsystem.entity.DcOrdersGoods;
 import com.zzkj.dcsystem.entity.DcUser;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.client.producer.TransactionMQProducer;
+import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +67,34 @@ public class DcsystemApplicationTests {
     DcOrdersGoodsMapper dcOrdersGoodsMapper;
     @Test
     public void test3(){
-
         DcOrders dcOrders = new DcOrders();
         dcOrders.setOrdersId("05bf2c39-3200-4bad-b037-158c211b42d9");
         List<DcOrdersGoods> dcOrdersGoods = dcOrdersGoodsMapper.selectDcOrdersGoodsByDcOrders(dcOrders);
         System.out.println(dcOrdersGoods);
+    }
+
+    @Autowired
+    DefaultMQProducer defaultMQProducer;
+
+    @Test
+    public void Test4(){
+        //创建消息
+        Message message = new Message("user-topic","white","你好阿，大老表".getBytes());
+        try {
+            SendResult send = defaultMQProducer.send(message);
+            System.out.println(send);
+
+        } catch (MQClientException e) {
+            e.printStackTrace();
+        } catch (RemotingException e) {
+            e.printStackTrace();
+        } catch (MQBrokerException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
     }
+
 }

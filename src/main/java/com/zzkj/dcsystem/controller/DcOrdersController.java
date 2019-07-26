@@ -6,7 +6,6 @@ import com.zzkj.dcsystem.service.DcOrdersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
@@ -43,7 +42,7 @@ public class DcOrdersController {
     public ResponseEntity getDcOrdersList(String userId){
         //看缓存中是否有该用户的订单信息
         ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
-        String json = ops.get(userId + ":DcOrdersList");
+        String json = ops.get("DcOrdersList:"+ userId);
         List<DcOrders> dcOrdersList = null;
         logger.info("用户:"+userId+"查询订单信息");
         if(json == null || "".equals(json)){
@@ -73,9 +72,9 @@ public class DcOrdersController {
         Gson gson = new Gson();
         String json = gson.toJson(dcOrdersList);
         //放入缓存中
-        ops.set(userId + ":DcOrdersList",json);
+        ops.set( "DcOrdersList:"+ userId,json);
         //设置7天过期
-        stringRedisTemplate.expire(userId + ":DcOrdersList",604800, TimeUnit.SECONDS);
+        stringRedisTemplate.expire("DcOrdersList:"+ userId  ,604800, TimeUnit.SECONDS);
     }
 
     public DcOrdersService getDcOrdersService() {
