@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>socket</title>
+    <script src="jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script>
+        var ws = new WebSocket("ws://localhost:8080/dcsystem/webSocket");
+        ws.onopen = function(){
+            console.log('连接成功');
+        }
+        ws.onmessage = function (ev) {
+            var received_msg = ev.data;
+            $("#show").append(received_msg+"<br/>");
+        }
+    </script>
+</head>
+<body>
+    <div id="show"></div>
+</body>
+</html>

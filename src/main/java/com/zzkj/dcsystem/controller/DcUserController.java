@@ -4,18 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zzkj.dcsystem.controller.utils.OpenIdAndSessionKey;
 import com.zzkj.dcsystem.controller.utils.RawData;
 import com.zzkj.dcsystem.service.DcUserService;
-import com.zzkj.dcsystem.utils.WxTools;
+import com.zzkj.dcsystem.controller.utils.WxTools;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,6 +41,11 @@ public class DcUserController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    WxTools wxTools;
+    @Autowired
+    DefaultMQProducer defaultMQProducer;
+
     @RequestMapping(value = "/userLogin")
     public ResponseEntity<Map<String, String>> userLogin(String code, String rawData, String signature, String encrypteData, String iv){
         ObjectMapper mapper = new ObjectMapper();
@@ -52,7 +60,7 @@ public class DcUserController {
                 data = mapper.readValue(rawData,RawData.class);
             }
             //调用工具获取openid和sessionkey
-            openidAndSessionkey = WxTools.getOpenidAndSessionkey(code);
+            openidAndSessionkey = wxTools.getOpenidAndSessionkey(code);
             openid = openidAndSessionkey.getOpenid();
             sessionKey = openidAndSessionkey.getSession_key();
         } catch (IOException e) {
@@ -64,6 +72,19 @@ public class DcUserController {
 
         //缓存openid, sessionKey, userId
         redisCache(openid,sessionKey,userId);
+
+        Message message = new Message("user-topic","white",("用户:" + userId + "登陆").getBytes());
+        try {
+            defaultMQProducer.send(message);
+        } catch (MQClientException e) {
+            e.printStackTrace();
+        } catch (RemotingException e) {
+            e.printStackTrace();
+        } catch (MQBrokerException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //返回数据
         Map<String,String> map = new HashMap<String,String>();

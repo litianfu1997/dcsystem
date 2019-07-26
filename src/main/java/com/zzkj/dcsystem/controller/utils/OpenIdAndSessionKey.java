@@ -1,6 +1,7 @@
 package com.zzkj.dcsystem.controller.utils;
 
 /**
+ * 微信服务器返回的openid和session_key
  * @author JGZ
  * @Classname OpenIdAndSessionKey
  * @Date 2019/7/23 15:30
