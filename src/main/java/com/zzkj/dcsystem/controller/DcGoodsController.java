@@ -30,10 +30,10 @@ public class DcGoodsController {
         List<DcGoods> HXGoods = new ArrayList<>();
         List<DcGoods> SCGoods = new ArrayList<>();
         for (DcGoods dcGood : dcGoods) {
-            if ("海鲜".equals(dcGood.getGoodsType())){
+            if ("海鲜".equals(dcGood.getDcGoodsType().getTypeName())){
                 HXGoods.add(dcGood);
                 dcGoodsMap.put("A",HXGoods);
-            }else if("蔬菜".equals(dcGood.getGoodsType())){
+            }else if("蔬菜".equals(dcGood.getDcGoodsType().getTypeName())){
                 SCGoods.add(dcGood);
                 dcGoodsMap.put("B",SCGoods);
             }
