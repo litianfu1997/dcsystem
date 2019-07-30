@@ -16,10 +16,13 @@ import java.util.Map;
  * @Email 1945282561@qq.com
  */
 public class WxTools {
-
+    /**
+     *  public static final String APPID = "wx29c36a9a81bf9220";
+     *  public static final String APPSECRET = "349b1d2c13f1bd81c786d1ca40fdeb56";
+     */
     public static final String JS_CODE_2_SESSION  = "https://api.weixin.qq.com/sns/jscode2session";
-    public static final String APPID = "wxa3f04bd3ab6a3018";
-    public static final String APPSECRET = "de5c0b0ae4bc4faa21890123902a627b";
+    public static final String APPID = "wx29c36a9a81bf9220";
+    public static final String APPSECRET = "349b1d2c13f1bd81c786d1ca40fdeb56";
 
     /**
      *  获取openid和session_key

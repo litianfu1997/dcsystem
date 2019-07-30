@@ -16,4 +16,11 @@ public interface IDcGoodsService {
      * @return
      */
     List<DcGoods> selectAllGoods();
+
+    /**
+     * 通过goodId查询商品信息
+     * @param goodsId
+     * @return
+     */
+    DcGoods selectGoodsById(String goodsId);
 }

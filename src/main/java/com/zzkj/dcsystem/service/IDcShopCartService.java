@@ -59,4 +59,30 @@ public interface IDcShopCartService {
      * @return
      */
     List<ShopCartGoodsDto> selectAllShopCartGoods(String shopCartId);
+
+    /**
+     * 修改购物车商品数量及总价
+     * @param shopCartId
+     * @param goodsId
+     * @param amount
+     * @param total
+     * @return
+     */
+    boolean updateShopCartGoodsCount(String shopCartId,String goodsId,Integer amount,Float total);
+
+    /**
+     * 查询该用户的购物车是否存在相同商品
+     * @param shopCartId
+     * @param goodsId
+     * @return
+     */
+    boolean selectShopCartGoodsByGoodsId(String shopCartId,String goodsId);
+
+    /**
+     * 通过shopCartId和goodsId删除购物车里的某一款商品
+     * @param shopCartId
+     * @param goodsId
+     * @return
+     */
+    boolean deleteShopCartGoodsById(String shopCartId,String goodsId);
 }

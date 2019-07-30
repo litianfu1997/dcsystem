@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class ShopCartGoodsDto {
     private String shopCartId;
+    private String goodsId;
     private String goodsName;
     private Float goodsPrice;
     /**
