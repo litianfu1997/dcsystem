@@ -13,7 +13,7 @@ public class DcGoods {
     private String goodsId;
     private String goodsName;
     private Float goodsPrice;
-    private DcGoodsType dcGoodsType;
+    private DcGoodsType goodsType;
     private Integer goodsTotal;
     private String goodsDetails;
     private String goodsImgUrl;

@@ -3,6 +3,7 @@ package com.zzkj.dcsystem.service.impl;
 import com.zzkj.dcsystem.controller.utils.DcGoodsQueryVo;
 import com.zzkj.dcsystem.dao.DcGoodsMapper;
 import com.zzkj.dcsystem.entity.DcGoods;
+import com.zzkj.dcsystem.entity.DcGoodsType;
 import com.zzkj.dcsystem.service.IDcGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,27 @@ public class DcGoodsServiceImpl implements IDcGoodsService {
      */
     @Override
     public List<DcGoods> selectAllGoods() {
+        List<DcGoodsType> goodsTypes=goodsMapper.selectGoodsType();
         List<DcGoods> dcGoods = goodsMapper.selectAllGoods();
+        for (DcGoodsType goodsType : goodsTypes) {
+            for (DcGoods dcGood : dcGoods) {
+                if (goodsType.getGoodsId().equals(dcGood.getGoodsId())){
+                    dcGood.setGoodsType(goodsType);
+                }
+
+            }
+        }
         return dcGoods;
     }
 
+    /**
+     * 通过goodId查询商品信息
+     * @param goodsId
+     * @return
+     */
+    @Override
+    public DcGoods selectGoodsById(String goodsId) {
+        return goodsMapper.selectGoodsById(goodsId);
     /**
      * 根据条件来查询商品
      * @param queryVo

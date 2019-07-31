@@ -19,6 +19,11 @@ public interface IDcGoodsService {
     List<DcGoods> selectAllGoods();
 
     /**
+     * 通过goodId查询商品信息
+     * @param goodsId
+     * @return
+     */
+    DcGoods selectGoodsById(String goodsId);
      * 根据条件来查询商品
      * @param queryVo
      * @return

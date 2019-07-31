@@ -1,5 +1,6 @@
 package com.zzkj.dcsystem.service.impl;
 
+import com.zzkj.dcsystem.dao.DcGoodsMapper;
 import com.zzkj.dcsystem.dao.DcShopCartGoodsMapper;
 import com.zzkj.dcsystem.dao.DcShopCartMapper;
 import com.zzkj.dcsystem.dto.ShopCartGoodsDto;
@@ -18,6 +19,8 @@ import java.util.List;
  */
 @Service
 public class DcShopCartServiceImpl implements IDcShopCartService {
+    @Autowired
+    private DcGoodsMapper goodsMapper;
     @Autowired
     private DcShopCartMapper shopCartMapper;
     @Autowired
@@ -101,4 +104,49 @@ public class DcShopCartServiceImpl implements IDcShopCartService {
 
         return dcGoodsList;
     }
+
+    /**
+     * 修改购物车商品数量及总价
+     * @param shopCartId
+     * @param goodsId
+     * @param amount
+     * @param total
+     * @return
+     */
+    @Override
+    public boolean updateShopCartGoodsCount(String shopCartId, String goodsId, Integer amount, Float total) {
+        boolean updateFlag = shopCartGoodsMapper.updateShopCartGoodsCount(shopCartId, goodsId, amount, total);
+        return updateFlag;
+    }
+
+    /**
+     * 查询该用户的购物车是否存在相同商品
+     * @param shopCartId
+     * @param goodsId
+     * @return
+     */
+    @Override
+    public boolean selectShopCartGoodsByGoodsId(String shopCartId, String goodsId) {
+        Integer existFlag = shopCartGoodsMapper.selectShopCartGoodsByGoodsId(shopCartId, goodsId);
+        if (existFlag == null){
+            return false;
+        }else {
+            return true;
+        }
+
+    }
+
+    /**
+     * 通过shopCartId和goodsId删除购物车里的某一款商品
+     *
+     * @param shopCartId
+     * @param goodsId
+     * @return
+     */
+    @Override
+    public boolean deleteShopCartGoodsById(String shopCartId, String goodsId) {
+        boolean deleteFlag = shopCartGoodsMapper.deleteShopCartGoodsById(shopCartId, goodsId);
+        return deleteFlag;
+    }
+
 }
