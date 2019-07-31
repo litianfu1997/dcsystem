@@ -1,5 +1,6 @@
 package com.zzkj.dcsystem.service;
 
+import com.zzkj.dcsystem.controller.utils.DcGoodsQueryVo;
 import com.zzkj.dcsystem.entity.DcGoods;
 
 import java.util.List;
@@ -16,4 +17,17 @@ public interface IDcGoodsService {
      * @return
      */
     List<DcGoods> selectAllGoods();
+
+    /**
+     * 根据条件来查询商品
+     * @param queryVo
+     * @return
+     */
+    List<DcGoods> selectGoods(DcGoodsQueryVo queryVo);
+
+    /**
+     * 根据id删除商品
+     * @param dcGoods
+     */
+    void deleteGoodsByGoodsId(DcGoods dcGoods);
 }

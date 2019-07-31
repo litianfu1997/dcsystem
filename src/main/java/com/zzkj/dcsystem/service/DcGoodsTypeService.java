@@ -18,4 +18,11 @@ public interface DcGoodsTypeService {
      * @return
      */
     public List<DcGoodsType> getAllDcGoodsType();
+
+    /**
+     * 添加类别类别
+     * @param dcGoodsType
+     * @return
+     */
+    Boolean addDcGoodsType(DcGoodsType dcGoodsType);
 }

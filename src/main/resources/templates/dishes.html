@@ -59,9 +59,8 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li :class="{'active':active[0]}"><a href="" @click.prevent="changeCom('listDishes',0)">菜品列表</a></li>
+                    <li :class="{'active':active[0]}"><a href="" @click.prevent="changeCom('listDishes',0),getDishesList()">菜品列表</a></li>
                     <li :class="{'active':active[1]}"><a href="" @click.prevent="changeCom('addDishes',1)">添加菜品</a></li>
-                    <li :class="{'active':active[2]}"><a href="" @click.prevent="changeCom('selectDishes',2)">查询菜品</a></li>
                 </ul>
 
                 <ul class="nav nav-sidebar">
@@ -72,7 +71,7 @@
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <transition  mode="out-in">
-                    <component :is="comName" v-bind:typelist="typeList" ></component>
+                    <component :is="comName" v-bind:typelist="typeList" v-bind:goodslist="goodsList" ></component>
                 </transition>
             </div>
         </div>
@@ -84,6 +83,28 @@
 <template id="listDishes">
     <div>
         <h2 class="sub-header">菜品列表</h2>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="selectGoodsName">菜品名</label>
+                <input v-model="goodsName" type="text" class="form-control" id="selectGoodsName" placeholder="菜品名">
+            </div>
+            <div class="form-group">
+                <label >价格</label>
+                <input v-model="startPrice" type="text" class="form-control">~<input v-model="endPrice" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>类别</label>
+                <select v-model="selected" class="form-control">
+                    <option disabled value="">请选择</option>
+                    <option v-for="type in typelist"  :value="type.typeId">
+                        {{type.typeName}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button @click.prevent="selectgoods()" class="btn btn-default" >查询</button>
+            </div>
+        </form>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -99,18 +120,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>05bf2c39-3200-4bad-b037-158c211b42d0</td>
-                    <td>四喜丸子</td>
-                    <td>10</td>
-                    <td>99</td>
-                    <td>yyyy</td>
-                    <td>肉类</td>
-                    <td>真的好吃</td>
+                <tr v-for="(goods,index) in goodslist">
+                    <td>{{index}}</td>
+                    <td>{{goods.goodsId}}</td>
+                    <td>{{goods.goodsName}}</td>
+                    <td>{{goods.goodsPrice}}</td>
+                    <td>{{goods.goodsTotal}}</td>
+                    <td>{{goods.goodsImgUrl}}</td>
+                    <td>{{goods.dcGoodsType}}</td>
+                    <td>{{goods.goodsDetails}}</td>
                     <td>
-                        <button class="btn btn-default">修改</button>
-                        <button class="btn btn-default" >删除</button>
+                        <button class="btn btn-default" >修改</button>
+                        <button class="btn btn-default" @click="deletegoods(goods.goodsId)" >删除</button>
                     </td>
                 </tr>
                 </tbody>
@@ -138,12 +159,11 @@
                 </div>
                 <div class="form-group">
                     <label>类别</label>
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
+                    <select v-model="selected" class="form-control">
+                        <option disabled value="">请选择</option>
+                        <option v-for="type in typelist"  :value="type.typeId">
+                            {{type.typeName}}
+                        </option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -157,64 +177,6 @@
                 <button type="submit" class="btn btn-default">添加</button>
             </form>
         </div>
-        </div>
-    </div>
-</template>
-<!--查询菜品-->
-<template id="selectDishes">
-    <div>
-        <h2 class="sub-header">查询菜品</h2>
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="selectGoodsName">菜品名</label>
-                <input type="text" class="form-control" id="selectGoodsName" placeholder="菜品名">
-            </div>
-            <div class="form-group">
-                <label >价格</label>
-                <input type="text" class="form-control">~<input type="text" class="form-control">
-            </div>
-            <div class="form-group">
-                <label>类别</label>
-                <select class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-        </form>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>序号</th>
-                    <th>菜品id</th>
-                    <th>菜品名</th>
-                    <th>价格</th>
-                    <th>数量</th>
-                    <th>图片</th>
-                    <th>类型</th>
-                    <th>详情</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>05bf2c39-3200-4bad-b037-158c211b42d0</td>
-                    <td>四喜丸子</td>
-                    <td>10</td>
-                    <td>99</td>
-                    <td>yyyy</td>
-                    <td>肉类</td>
-                    <td>真的好吃</td>
-                    <td>
-                        <button class="btn btn-default">修改</button>
-                        <button class="btn btn-default" >删除</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
         </div>
     </div>
 </template>
@@ -252,9 +214,9 @@
             <form>
                 <div class="form-group">
                     <label for="typeName">类别名</label>
-                    <input type="text" class="form-control" id="typeName" placeholder="类别名">
+                    <input type="text" v-model="typeName" class="form-control"  id="typeName" placeholder="类别名" >
                 </div>
-                <button type="submit" class="btn btn-default">添加</button>
+                <button @click.prevent="addtype()" class="btn btn-default" >添加</button>
             </form>
         </div>
     </div>
@@ -265,13 +227,94 @@
 
     <script>
         //菜品列表
-        Vue.component("listDishes",{template:"#listDishes"});
+        Vue.component("listDishes",{
+            template:"#listDishes",
+            props:['goodslist','typelist'],
+            data:function () {
+                return {
+                    selected:"",
+                    goodsName:"",
+                    startPrice:null,
+                    endPrice:null,
+                }
+            },
+            methods:{
+                selectgoods(){
+                    // alert(this.selected+"  "+this.goodsName+"  "+this.startPrice+"  "+this.endPrice);
+                    var goodsname = this.goodsName;
+                    var typeid = this.selected;
+                    var startprice = this.startPrice;
+                    var endprice = this.endPrice;
+                    var vm = this;
+                    $.ajax({
+                        url:"http://localhost:8080/dcsystem/selectGoods",
+                        type:"POST",
+                        data:{
+                            goodsName:goodsname,
+                            typeId:typeid,
+                            startPrice:startprice,
+                            endPrice:endprice
+                        },
+                        success:function (data) {
+                            // alert(data);
+                            vm.goodslist = data;
+                        }
+                    });
+                },
+                deletegoods(id){
+                    if(confirm("你确定要删除该商品吗？")){
+                        $.ajax({
+                            url:"http://localhost:8080/dcsystem/deleteGoods",
+                            type:"POST",
+                            data:{
+                                goodsId:id
+                            },
+                            success:function (data) {
+                                // alert(data);
+                                vm.goodslist = data;
+                            }
+                        });
+                    }
+                }
+            }
+
+        });
         //添加菜品
-        Vue.component("addDishes",{template:"#addDishes"});
-        //查询菜品
-        Vue.component("selectDishes",{template:"#selectDishes"});
+        Vue.component("addDishes",{
+            template:"#addDishes",
+            props:['typelist'],
+            data:function () {
+                return { selected:""}
+            }
+        });
         //添加类别
-        Vue.component("addType",{template:"#addType"});
+        Vue.component("addType",{
+            template:"#addType",
+            data:function () {
+                    return {typeName:''}
+                },
+            methods:{
+                addtype(){
+                    var vm = this;
+                    var name = this.typeName;
+                    $.ajax({
+                        url:"http://localhost:8080/dcsystem/addDcGoodsType",
+                        type:"POST",
+                        data:{typeName:name},
+                        success:function (data) {
+                            if (data){
+                                alert("插入成功");
+                                vm.typeName="";
+                            }
+                            else {
+                                alert("该类别已存在");
+                            }
+                        }
+                    });
+
+                }
+            }
+        });
         //类别列表
         Vue.component("TypeList",{
             template:"#TypeList",
@@ -283,9 +326,28 @@
             data:{
                 comName:"listDishes",
                 active:[true,false,false,false,false],
-                typeList:null
+                typeList:null,
+                goodsList:null
+            },
+            created() {
+                var vm = this;
+                //页面初始化的时候请求一次服务端的菜品列表
+                axios.post("http://localhost:8080/dcsystem/goodsList")
+                    .then(function (res) {
+                        vm.goodsList = res.data;
+                    }).catch(function (res) {
+                    alert(res+"错误");
+                });
+                //页面初始化的时候请求一次服务端的类别列表
+                axios.post("http://localhost:8080/dcsystem/typeList")
+                    .then(function (res) {
+                        vm.typeList = res.data;
+                    }).catch(function (res) {
+                    alert(res+"错误");
+                });
             },
             methods:{
+                //改变模板
                 changeCom(name,flag){
                     this.comName = name;
                     var i = 0;
@@ -298,11 +360,22 @@
                         }
                     }
                 },
+                //获取类别列表
                 getTypeList(){
                     var vm = this;
                     axios.post("http://localhost:8080/dcsystem/typeList")
                         .then(function (res) {
                             vm.typeList = res.data;
+                        }).catch(function (res) {
+                        alert(res+"错误");
+                    })
+                },
+                //获取菜品列表
+                getDishesList(){
+                    var vm = this;
+                    axios.post("http://localhost:8080/dcsystem/goodsList")
+                        .then(function (res) {
+                            vm.goodsList = res.data;
                         }).catch(function (res) {
                         alert(res+"错误");
                     })
