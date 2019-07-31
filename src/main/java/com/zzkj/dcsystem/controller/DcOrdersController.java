@@ -1,10 +1,17 @@
 package com.zzkj.dcsystem.controller;
 
+import com.google.gson.Gson;
 import com.zzkj.dcsystem.dto.*;
 import com.zzkj.dcsystem.entity.DcOrders;
-import com.zzkj.dcsystem.entity.DcOrdersGoods;
+import com.zzkj.dcsystem.service.DcOrdersService;
 import com.zzkj.dcsystem.service.impl.DcOrdersServiceServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author litianfu
@@ -26,10 +34,14 @@ public class DcOrdersController {
 
     @Autowired
     private DcOrdersServiceServiceImpl ordersService;
-      @Autowired
+
+    @Autowired
+    private DcOrdersService dcOrdersService;
+
+    @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+//    private Logger logger = LoggerFactory.getLogger(this.getClass());
   
     @RequestMapping("/order/insertOrder.action")
     public @ResponseBody Message insertOrder(@RequestBody OrdersGoodsDto ordersGoodsDto){
@@ -74,10 +86,11 @@ public class DcOrdersController {
   
   
     @RequestMapping("/order/selectOrder.action")
-    public @ResponseBody List<OrdersDto> selectOrder(@RequestBody DcOrders orders){
+    public @ResponseBody List<OrdersDto> selectOrder(@RequestBody DcOrders orders) {
         List<OrdersDto> ordersList = ordersService.selectOrderByUserId(orders.getUser().getUserId());
         return ordersList;
 
+    }
 
     /**
      * 获取用户的订单信息
@@ -90,18 +103,18 @@ public class DcOrdersController {
         ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
         String json = ops.get("DcOrdersList:"+ userId);
         List<DcOrders> dcOrdersList = null;
-        logger.info("用户:"+userId+"查询订单信息");
+//        logger.info("用户:"+userId+"查询订单信息");
         if(json == null || "".equals(json)){
             //如果没有
             //根据用户id获取订单列表
             dcOrdersList = dcOrdersService.getDcOrdersListByUserId(userId);
             //放入缓存
             this.redisCache(userId,dcOrdersList);
-            logger.info("用户:从数据库中获取");
+//            logger.info("用户:从数据库中获取");
         }
         else{
             dcOrdersList = new Gson().fromJson(json,List.class);
-            logger.info("用户:从缓存中获取");
+//            logger.info("用户:从缓存中获取");
         }
         //返回
         return ResponseEntity.status(HttpStatus.OK).body(dcOrdersList);
@@ -123,12 +136,4 @@ public class DcOrdersController {
         stringRedisTemplate.expire("DcOrdersList:"+ userId  ,604800, TimeUnit.SECONDS);
     }
 
-    public DcOrdersService getDcOrdersService() {
-        return dcOrdersService;
-    }
-
-    public void setDcOrdersService(DcOrdersService dcOrdersService) {
-        this.dcOrdersService = dcOrdersService;
-
-    }
 }

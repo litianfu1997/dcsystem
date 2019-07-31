@@ -49,6 +49,7 @@ public class DcGoodsServiceImpl implements IDcGoodsService {
     @Override
     public DcGoods selectGoodsById(String goodsId) {
         return goodsMapper.selectGoodsById(goodsId);
+    }
     /**
      * 根据条件来查询商品
      * @param queryVo
