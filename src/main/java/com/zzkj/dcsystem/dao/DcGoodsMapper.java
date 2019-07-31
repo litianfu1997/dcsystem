@@ -30,7 +30,6 @@ public interface DcGoodsMapper {
      */
     @Select("select * from dc_goods where goods_id = #{goodsId}")
     DcGoods selectGoodsById(@Param("goodsId")String goodsId);
-
     @Select("select * from dc_goods,dc_goods_type where dc_goods.type_id=dc_goods_type.type_id")
     List<DcGoodsType> selectGoodsType();
 }
