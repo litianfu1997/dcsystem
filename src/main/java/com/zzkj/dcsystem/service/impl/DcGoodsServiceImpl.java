@@ -1,5 +1,6 @@
 package com.zzkj.dcsystem.service.impl;
 
+import com.zzkj.dcsystem.controller.utils.DcGoodsQueryVo;
 import com.zzkj.dcsystem.dao.DcGoodsMapper;
 import com.zzkj.dcsystem.entity.DcGoods;
 import com.zzkj.dcsystem.service.IDcGoodsService;
@@ -28,6 +29,22 @@ public class DcGoodsServiceImpl implements IDcGoodsService {
     public List<DcGoods> selectAllGoods() {
         List<DcGoods> dcGoods = goodsMapper.selectAllGoods();
         return dcGoods;
+    }
+
+    /**
+     * 根据条件来查询商品
+     * @param queryVo
+     * @return
+     */
+    @Override
+    public List<DcGoods> selectGoods(DcGoodsQueryVo queryVo) {
+        List<DcGoods> dcGoods = goodsMapper.selectGoods(queryVo);
+        return dcGoods;
+    }
+
+    @Override
+    public void deleteGoodsByGoodsId(DcGoods dcGoods) {
+        goodsMapper.deleteGoodsByGoodsId(dcGoods);
     }
 
 
