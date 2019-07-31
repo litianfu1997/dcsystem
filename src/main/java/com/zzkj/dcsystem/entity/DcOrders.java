@@ -3,6 +3,7 @@ package com.zzkj.dcsystem.entity;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author litianfu
@@ -13,13 +14,13 @@ import java.util.Date;
 @Data
 public class DcOrders {
     private String ordersId;
-    private String linkMan;
+    private DcUser user;
+    private String linkman;
     private String phone;
     private Date createDate;
     private String note;
     private String storeAddress;
     private String userAddress;
-    private DcUser user;
     /**
      * 订单的总价格
      */
@@ -28,4 +29,8 @@ public class DcOrders {
      * 评价
      */
     private String evaluation;
+    /**
+     * 订单中的商品信息列表
+     */
+    private List<DcOrdersGoods> goodsList;
 }

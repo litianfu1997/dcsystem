@@ -1,6 +1,7 @@
 package com.zzkj.dcsystem.controller.utils;
 
 /**
+ * 微信用户的非敏感数据
  * @author JGZ
  * @Classname RawData
  * @Date 2019/7/23 15:55

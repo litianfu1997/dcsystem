@@ -1,5 +1,6 @@
 package com.zzkj.dcsystem.controller;
 
+import com.zzkj.dcsystem.controller.utils.DcGoodsQueryVo;
 import com.zzkj.dcsystem.entity.DcGoods;
 import com.zzkj.dcsystem.service.impl.DcGoodsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,35 @@ public class DcGoodsController {
         }
 
         return dcGoodsMap;
+    }
+
+    /**
+     * 获取所有菜品
+     * @return
+     */
+    @RequestMapping(value = "/goodsList")
+    public @ResponseBody List<DcGoods> goodsList(){
+        List<DcGoods> dcGoods = goodsService.selectAllGoods();
+        return dcGoods;
+    }
+
+    /**
+     * 条件查询商品
+     * @param queryVo
+     * @return
+     */
+    @RequestMapping(value = "/selectGoods")
+    public @ResponseBody List<DcGoods> selectGoods(DcGoodsQueryVo queryVo){
+        List<DcGoods> dcGoods = goodsService.selectGoods(queryVo);
+        return dcGoods;
+    }
+
+    @RequestMapping(value = "deleteGoods")
+    public String deleteGoods(DcGoods dcGoods){
+        //删除商品
+        goodsService.deleteGoodsByGoodsId(dcGoods);
+        //重定向到商品列表
+        return "redirect:/goodsList";
     }
 
 }
