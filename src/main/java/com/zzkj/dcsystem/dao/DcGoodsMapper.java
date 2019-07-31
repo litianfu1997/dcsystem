@@ -34,6 +34,8 @@ public interface DcGoodsMapper {
     DcGoods selectGoodsById(@Param("goodsId")String goodsId);
     @Select("select * from dc_goods,dc_goods_type where dc_goods.type_id=dc_goods_type.type_id")
     List<DcGoodsType> selectGoodsType();
+
+    /**
      * 根据条件查询商品信息
      * @param queryVo
      * @return

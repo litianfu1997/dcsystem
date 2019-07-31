@@ -24,6 +24,8 @@ public interface IDcGoodsService {
      * @return
      */
     DcGoods selectGoodsById(String goodsId);
+
+    /**
      * 根据条件来查询商品
      * @param queryVo
      * @return
