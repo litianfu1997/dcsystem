@@ -52,13 +52,13 @@ public class DcGoodsController {
                 //如果该商品属于该类别，则放入对应的list集合中
                 if(dcGoodsList.get(i).getGoodsType().getTypeId().
                         equals(dcGoodsTypeList.get(j).getTypeId())){
-                    dcGoodsMap.get(String.valueOf(n.charAt(i))).add(dcGoodsList.get(i));
+                    dcGoodsMap.get(String.valueOf(n.charAt(j))).add(dcGoodsList.get(i));
                 }
             }
         }
 //        List<DcGoods> HXGoods = new ArrayList<>();
 //        List<DcGoods> SCGoods = new ArrayList<>();
-//        for (DcGoods dcGood : dcGoods) {
+//        for (DcGoods dcGood : dcGoodsList) {
 //            if ("海鲜".equals(dcGood.getGoodsType().getTypeName())){
 //                HXGoods.add(dcGood);
 //                dcGoodsMap.put("A",HXGoods);
