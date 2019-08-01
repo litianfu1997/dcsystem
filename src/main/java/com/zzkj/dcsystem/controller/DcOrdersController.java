@@ -72,6 +72,8 @@ public class DcOrdersController {
                 ordersGoods.setTotal(total);
                 boolean orderGoodsFlag = ordersService.insertOrderGoods(ordersGoods);
             }
+            Boolean delete = stringRedisTemplate.delete("DcOrdersList:" + orders.getUserId());
+
             if (b){
                 return new Message("success","订单已完成");
             }else {
