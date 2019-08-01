@@ -57,6 +57,7 @@ public class DcGoodsServiceImpl implements IDcGoodsService {
      */
     @Override
     public List<DcGoods> selectGoods(DcGoodsQueryVo queryVo) {
+        queryVo.setGoodsName("%"+queryVo.getGoodsName()+"%");
         List<DcGoods> dcGoods = goodsMapper.selectGoods(queryVo);
         return dcGoods;
     }

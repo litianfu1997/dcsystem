@@ -8,7 +8,7 @@
         select * from dc_goods
         <where>
             <if test=" goodsName != null and goodsName != ''">
-              and goods_name = #{goodsName}
+              and goods_name like #{goodsName}
             </if>
             <if test=" startPrice != null ">
                 and goods_price <![CDATA[>=]]> #{startPrice}

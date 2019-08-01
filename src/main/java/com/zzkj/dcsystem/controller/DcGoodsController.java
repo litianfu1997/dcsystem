@@ -5,7 +5,9 @@ import com.zzkj.dcsystem.entity.DcGoods;
 import com.zzkj.dcsystem.service.impl.DcGoodsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -60,6 +62,16 @@ public class DcGoodsController {
      */
     @RequestMapping(value = "/selectGoods")
     public @ResponseBody List<DcGoods> selectGoods(DcGoodsQueryVo queryVo){
+        List<DcGoods> dcGoods = goodsService.selectGoods(queryVo);
+        return dcGoods;
+    }
+    /**
+     * 条件查询商品
+     * @param queryVo
+     * @return
+     */
+    @RequestMapping(value = "/WXselectGoods")
+    public @ResponseBody List<DcGoods> WXselectGoods(@RequestBody DcGoodsQueryVo queryVo){
         List<DcGoods> dcGoods = goodsService.selectGoods(queryVo);
         return dcGoods;
     }
