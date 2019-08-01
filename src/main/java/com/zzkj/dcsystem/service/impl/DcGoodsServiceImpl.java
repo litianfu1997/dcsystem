@@ -74,5 +74,22 @@ public class DcGoodsServiceImpl implements IDcGoodsService {
         goodsMapper.addDcGoods(dcGoods);
     }
 
+    @Override
+    public DcGoods getGoodsById(String goodsId) {
+        DcGoods goods = goodsMapper.getGoodsById(goodsId);
+        return goods;
+    }
+
+    @Override
+    public List<DcGoods> getAllGoods() {
+        List<DcGoods> goods = goodsMapper.getAllGoods();
+        return goods;
+    }
+
+    @Override
+    public void updateGoods(DcGoods dcGoods) {
+        goodsMapper.updateGoods(dcGoods);
+    }
+
 
 }

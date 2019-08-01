@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>修改页</title>
+    <link href="css/bootstrap.css" rel="stylesheet"/>
+    <link href="css/dashboard.css" rel="stylesheet"/>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/holder.js"></script>
+</head>
+<body>
+<div class="content">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h2 class="sub-header">修改</h2>
+            <form action="http://localhost:8080/dcsystem/updateGoods" method="post" enctype="multipart/form-data">
+                <input type="text" name="goodsId" th:value="${goods.goodsId}"   class="form-control" id="goodsId" placeholder="菜品id">
+                <div class="form-group">
+                    <label for="goodsName">菜品名</label>
+                    <input type="text" name="goodsName" th:value="${goods.goodsName}" class="form-control" id="goodsName" placeholder="菜品名">
+                </div>
+                <div class="form-group">
+                    <label for="goodsPrice">价格</label>
+                    <input type="text" name="goodsPrice" th:value="${goods.goodsPrice}" class="form-control" id="goodsPrice" placeholder="价格">
+                </div>
+                <div class="form-group">
+                    <label for="goodsTotal">数量</label>
+                    <input type="text" name="goodsTotal" th:value="${goods.goodsTotal}" class="form-control" id="goodsTotal" placeholder="数量">
+                </div>
+                <div class="form-group">
+                    <label>类别</label>
+                    <select  name="goodsType.typeId" class="form-control">
+                        <option th:each="type:${goodsType}" th:selected="${goods.goodsType.typeId}==${type.typeId}?'true':'false'" th:value="${type.typeId}">[[${type.typeName}]]</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputFile">图片</label>
+                    <a th:if="${goods.goodsImgUrl != null}" th:href="${goods.goodsImgUrl}">查看图片</a>
+                    <input type="file" name="goodsImg" id="exampleInputFile">
+                </div>
+                <div class="form-group">
+                    <label for="goodsDetails">详情</label>
+                    <textarea th:text="${goods.goodsDetails}" name="goodsDetails" class="form-control" id="goodsDetails" placeholder="详情"></textarea>
+                </div>
+                <button type="submit" class="btn btn-default btn-primary" >修改</button>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+</body>
+</html>

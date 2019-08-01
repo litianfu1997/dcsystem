@@ -65,14 +65,14 @@
                 </ul>
 
                 <ul class="nav nav-sidebar">
-                    <li :class="{'active':active[3]}"><a href="" @click.prevent="changeCom('TypeList',3),getTypeList()">类别列表</a></li>
+                    <li :class="{'active':active[3]}"><a href="" @click.prevent="changeCom('typeList',3),getTypeList()">类别列表</a></li>
                     <li :class="{'active':active[4]}"><a href="" @click.prevent="changeCom('addType',4)">添加类别</a></li>
                 </ul>
 
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <transition  mode="out-in">
-                    <component :is="comName" v-bind:typelist="typeList" v-bind:goodslist="goodsList" ></component>
+                    <component  :is="comName"  v-bind:typelist="typeList" v-bind:goodslist="goodsList" ></component>
                 </transition>
 
             </div>
@@ -131,10 +131,10 @@
                         <a :href="goods.goodsImgUrl">图片</a>
                         <!--<img :src="goods.goodsImgUrl">-->
                     </td>
-                    <td>{{goods.dcGoodsType}}</td>
+                    <td>{{goods.goodsType.typeName}}</td>
                     <td>{{goods.goodsDetails}}</td>
                     <td>
-                        <button class="btn btn-default"  >修改</button>
+                        <button class="btn btn-default" @click="updateGoods(goods.goodsId)" >修改</button>
                         <button class="btn btn-default" @click="deletegoods(goods.goodsId)" >删除</button>
                     </td>
                 </tr>
@@ -164,7 +164,7 @@
                 <div class="form-group">
                     <label>类别</label>
                     <select v-model="typeId" name="goodsType.typeId" class="form-control">
-                        <option disabled value="">请选择</option>
+                        <option  value="">请选择</option>
                         <option v-for="type in typelist"  :value="type.typeId">
                             {{type.typeName}}
                         </option>
@@ -182,7 +182,6 @@
             </form>
         </div>
         </div>
-    </div>
 </template>
 <!--类别列表-->
 <template id="TypeList">
@@ -229,9 +228,10 @@
 
 
 
+
     <script>
         //菜品列表
-        Vue.component("listDishes",{
+        var listDishes = Vue.component("listDishes",{
             template:"#listDishes",
             props:['goodslist','typelist'],
             data:function () {
@@ -243,6 +243,9 @@
                 }
             },
             methods:{
+                updateGoods(goodsId){
+                    window.location.href = "http://localhost:8080/dcsystem/preUpdateGoods?goodsId="+goodsId;
+                },
                 selectgoods(){
                     // alert(this.selected+"  "+this.goodsName+"  "+this.startPrice+"  "+this.endPrice);
                     var goodsname = this.goodsName;
@@ -285,17 +288,17 @@
 
         });
         //添加菜品
-        Vue.component("addDishes",{
+        var addDishes = Vue.component("addDishes",{
             template:"#addDishes",
             props:['typelist'],
             data:function () {
                 return {
-                    selected:""
+                    typeId:""
                 }
             }
         });
         //添加类别
-        Vue.component("addType",{
+        var addType = Vue.component("addType",{
             template:"#addType",
             data:function () {
                     return {typeName:''}
@@ -323,7 +326,7 @@
             }
         });
         //类别列表
-        Vue.component("TypeList",{
+        var typeList = Vue.component("typeList",{
             template:"#TypeList",
             props:['typelist']
         });
@@ -334,7 +337,7 @@
                 comName:"listDishes",
                 active:[true,false,false,false,false],
                 typeList:null,
-                goodsList:null
+                goodsList:null,
             },
             created() {
                 var vm = this;
@@ -387,7 +390,6 @@
                         alert(res+"错误");
                     })
                 }
-
             }
         });
     </script>

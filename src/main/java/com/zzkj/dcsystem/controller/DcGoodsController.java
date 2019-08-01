@@ -7,6 +7,7 @@ import com.zzkj.dcsystem.service.DcGoodsTypeService;
 import com.zzkj.dcsystem.service.impl.DcGoodsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,7 +78,7 @@ public class DcGoodsController {
      */
     @RequestMapping(value = "/goodsList")
     public @ResponseBody List<DcGoods> goodsList(){
-        List<DcGoods> dcGoods = goodsService.selectAllGoods();
+        List<DcGoods> dcGoods = goodsService.getAllGoods();
         return dcGoods;
     }
 
@@ -115,23 +116,73 @@ public class DcGoodsController {
         return this.goodsList();
     }
 
+    /**
+     * 插入商品
+     * @param request
+     * @param dcGoods
+     * @param goodsImg
+     * @return
+     */
     @RequestMapping(value = "/addGoods")
     public  String addGoods(HttpServletRequest request,DcGoods dcGoods, @RequestParam(value = "goodsImg") MultipartFile goodsImg){
-        //生成新文件名文件名(包含后缀)
-        String imgName = UUID.randomUUID().toString().replace("-","")+goodsImg.getOriginalFilename();
-        //获取项目路径
-        String contextPath = request.getContextPath();
-        //指定文件存放在d盘下
-        File file = new File("D:/file/"+imgName);
-        try {
-            goodsImg.transferTo(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        if (!goodsImg.isEmpty()){
+            //生成新文件名文件名(包含后缀)
+            String imgName = UUID.randomUUID().toString().replace("-","")+goodsImg.getOriginalFilename();
+            //获取项目路径
+            String contextPath = request.getContextPath();
+            //指定文件存放在d盘下
+            File file = new File("D:/file/"+imgName);
+            try {
+                goodsImg.transferTo(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 //        System.out.println(dcGoods);
-        dcGoods.setGoodsImgUrl(contextPath+"/images/"+imgName);
+            dcGoods.setGoodsImgUrl(contextPath+"/images/"+imgName);
+        }
         //插入数据
         goodsService.addDcGoods(dcGoods);
+
+        return "redirect:/toDishes";
+    }
+
+    /**
+     * 修改商前的准备
+     * @param dcGoods
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/preUpdateGoods")
+    public String preUpdateGoods(DcGoods dcGoods, Model model){
+        //根据商品id查询商品信息
+        DcGoods goods = goodsService.getGoodsById(dcGoods.getGoodsId());
+        //查询所有类别信息
+        List<DcGoodsType> allDcGoodsType = dcGoodsTypeService.getAllDcGoodsType();
+        //放入数据域
+        model.addAttribute("goods",goods);
+        model.addAttribute("goodsType",allDcGoodsType);
+        return "update";
+    }
+
+    @RequestMapping(value = "/updateGoods")
+    public String updateGoods(HttpServletRequest request,DcGoods dcGoods, @RequestParam(value = "goodsImg") MultipartFile goodsImg){
+
+        if (!goodsImg.isEmpty()){
+            //生成新文件名文件名(包含后缀)
+            String imgName = UUID.randomUUID().toString().replace("-","")+goodsImg.getOriginalFilename();
+            //获取项目路径
+            String contextPath = request.getContextPath();
+            //指定文件存放在d盘下
+            File file = new File("D:/file/"+imgName);
+            try {
+                goodsImg.transferTo(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            dcGoods.setGoodsImgUrl(contextPath+"/images/"+imgName);
+        }
+        //修改数据
+        goodsService.updateGoods(dcGoods);
 
         return "redirect:/toDishes";
     }
