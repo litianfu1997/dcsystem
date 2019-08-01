@@ -1,9 +1,9 @@
 package com.zzkj.dcsystem.controller;
 
-import com.zzkj.dcsystem.dto.Message;
+
+import com.zzkj.dcsystem.dto.ResponseMessage;
 import com.zzkj.dcsystem.dto.ShopCartDto;
 import com.zzkj.dcsystem.dto.ShopCartGoodsDto;
-import com.zzkj.dcsystem.entity.DcGoods;
 import com.zzkj.dcsystem.service.impl.DcGoodsServiceImpl;
 import com.zzkj.dcsystem.service.impl.DcShopCartServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class DcShopCartController {
      */
     @RequestMapping("/shopCart/shopCartOption.action")
     public @ResponseBody
-    Message shopCartOption(@RequestBody ShopCartDto shopCartDto){
+    ResponseMessage shopCartOption(@RequestBody ShopCartDto shopCartDto){
         //查询该用户是否存在购物车
         boolean flag  = shopCartService.selectShopCartByUserId(shopCartDto.getUserId());
         //如果购物车表中没有该用户的购物车，就添加一辆购物车
@@ -55,14 +55,14 @@ public class DcShopCartController {
                 boolean insertFlag = shopCartService.insertGoodsToShopCart(shopCartId, shopCartDto.getGoodsId(), shopCartDto.getAmount(), shopCartDto.getTotal());
                 if (insertFlag==false){
                     System.out.println("插入失败");
-                    return new Message("error","添加失败");
+                    return new ResponseMessage("error","添加失败");
                 }else {
                     System.out.println("插入成功");
-                    return new Message("success","添加成功");
+                    return new ResponseMessage("success","添加成功");
                 }
             }else {
                 System.out.println("该商品已存在");
-                return new Message("error","该商品已存在");
+                return new ResponseMessage("error","该商品已存在");
             }
 
         }

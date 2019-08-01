@@ -1,6 +1,7 @@
 package com.zzkj.dcsystem.dto;
 
 import lombok.Data;
+import sun.misc.Request;
 
 /**
  * @author litianfu
@@ -9,11 +10,11 @@ import lombok.Data;
  * @date 2019-07-26 11:33
  */
 @Data
-public class Message {
+public class ResponseMessage {
     private String status;
     private String msg;
 
-    public Message(String status, String msg) {
+    public ResponseMessage(String status, String msg) {
         this.status = status;
         this.msg = msg;
     }

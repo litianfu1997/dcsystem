@@ -74,18 +74,18 @@ public class DcUserController {
         //缓存openid, sessionKey, userId
         redisCache(openid,sessionKey,userId);
 
-        Message message = new Message("user-topic","white",("用户:" + userId + "登陆").getBytes());
-        try {
-            defaultMQProducer.send(message);
-        } catch (MQClientException e) {
-            e.printStackTrace();
-        } catch (RemotingException e) {
-            e.printStackTrace();
-        } catch (MQBrokerException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        Message message = new Message("user-topic","white",("用户:" + userId + "登陆").getBytes());
+//        try {
+//            defaultMQProducer.send(message);
+//        } catch (MQClientException e) {
+//            e.printStackTrace();
+//        } catch (RemotingException e) {
+//            e.printStackTrace();
+//        } catch (MQBrokerException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         //返回数据
         Map<String,String> map = new HashMap<String,String>();

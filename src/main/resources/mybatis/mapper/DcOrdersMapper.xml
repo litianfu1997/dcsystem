@@ -4,13 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzkj.dcsystem.dao.DcOrdersMapper">
 
-    <select id="selectOrdersByUserId" resultMap="selectOrdersByUserId" parameterType="DcUser">
+    <select id="selectOrdersByUserId" resultMap="selectOrders" parameterType="DcUser">
         select
         orders_id,linkman,phone,create_date,note,store_address,user_address,combined,evaluation
         from dc_orders
         where user_id = #{userId}
     </select>
-    <resultMap id="selectOrdersByUserId" type="DcOrders">
+    <resultMap id="selectOrders" type="DcOrders">
         <id column="orders_id" property="ordersId"/>
         <result column="linkman" property="linkman"/>
         <result column="phone" property="phone"/>
@@ -21,6 +21,13 @@
         <result column="combined" property="combined"/>
         <result column="evaluation" property="evaluation" />
     </resultMap>
+
+    <select id="selectDcOrderByOrderId" resultMap="selectOrders" parameterType="String">
+         select
+        orders_id,linkman,phone,create_date,note,store_address,user_address,combined,evaluation
+        from dc_orders
+        where orders_id = #{ordersId}
+    </select>
 
 
 

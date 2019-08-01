@@ -22,4 +22,10 @@ public interface DcOrdersMapper {
      */
     public List<DcOrders> selectOrdersByUserId(DcUser user);
 
+    /**
+     * 通过订单id获订单的所有信息，包括订单中的商品
+     * @param ordersId
+     * @return
+     */
+    DcOrders selectDcOrderByOrderId(String ordersId);
 }

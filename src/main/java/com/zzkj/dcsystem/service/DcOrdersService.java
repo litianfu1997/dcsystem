@@ -18,4 +18,11 @@ public interface DcOrdersService {
      * @return
      */
     public List<DcOrders> getDcOrdersListByUserId(String userId);
+
+    /**
+     * 通过订单id获订单的所有信，包括订单中的商品
+     * @param ordersId
+     * @return
+     */
+    public DcOrders selectDcOrderByOrderId(String ordersId);
 }

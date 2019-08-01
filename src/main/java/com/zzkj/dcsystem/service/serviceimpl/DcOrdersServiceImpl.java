@@ -56,4 +56,18 @@ public class DcOrdersServiceImpl implements DcOrdersService {
         }
         return dcOrdersList;
     }
+
+    @Override
+    public DcOrders selectDcOrderByOrderId(String ordersId) {
+        //获取订单
+        DcOrders dcOrders =  dcOrdersMapper.selectDcOrderByOrderId(ordersId);
+        //通过订单获取订单中的商品
+        if(dcOrders != null){
+            List<DcOrdersGoods> DcOrdersGoodsList = dcOrdersGoodsMapper.selectDcOrdersGoodsByDcOrders(dcOrders);
+            //将其放入对象中
+            dcOrders.setGoodsList(DcOrdersGoodsList);
+        }
+
+        return dcOrders;
+    }
 }

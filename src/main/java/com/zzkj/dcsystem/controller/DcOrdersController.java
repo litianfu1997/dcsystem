@@ -5,8 +5,10 @@ import com.zzkj.dcsystem.dto.*;
 import com.zzkj.dcsystem.entity.DcOrders;
 import com.zzkj.dcsystem.service.DcOrdersService;
 import com.zzkj.dcsystem.service.impl.DcOrdersServiceServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.apache.rocketmq.common.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +44,14 @@ public class DcOrdersController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    DefaultMQProducer defaultMQProducer;
+
 //    private Logger logger = LoggerFactory.getLogger(this.getClass());
   
     @RequestMapping("/order/insertOrder.action")
-    public @ResponseBody Message insertOrder(@RequestBody OrdersGoodsDto ordersGoodsDto){
+    public @ResponseBody
+    ResponseMessage insertOrder(@RequestBody OrdersGoodsDto ordersGoodsDto){
 
         OrdersDto orders =new OrdersDto();
         orders.setOrdersId(UUID.randomUUID().toString());
@@ -72,17 +79,38 @@ public class DcOrdersController {
                 ordersGoods.setTotal(total);
                 boolean orderGoodsFlag = ordersService.insertOrderGoods(ordersGoods);
             }
+
             Boolean delete = stringRedisTemplate.delete("DcOrdersList:" + orders.getUserId());
 
             if (b){
-                return new Message("success","订单已完成");
+                //从数据库中获取刚刚插入数据库的记录
+                DcOrders mqOrders =  dcOrdersService.selectDcOrderByOrderId(orders.getOrdersId());
+                Gson gson = new Gson();
+                String json = gson.toJson(mqOrders);
+                //将其放入消息队列
+                Message message = new Message("user-orders","white",json.getBytes());
+                //发送消息
+                try {
+                    defaultMQProducer.send(message);
+                } catch (MQClientException e) {
+                    e.printStackTrace();
+                } catch (RemotingException e) {
+                    e.printStackTrace();
+                } catch (MQBrokerException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+                return new ResponseMessage("success","订单已完成");
             }else {
-                return new Message("error","订单未完成");
+                return new ResponseMessage("error","订单未完成");
 
             }
         }
 
-        return new Message("error","订单信息为空！");
+        return new ResponseMessage("error","订单信息为空！");
 
     }
   

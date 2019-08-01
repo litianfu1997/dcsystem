@@ -35,4 +35,22 @@ public class ConsumerService {
         }
     }
 
+    /**
+     * 监听user-orders主题，white标签的消息
+     * @param event
+     */
+    @EventListener(condition = "#event.msgs[0].topic=='user-orders'&&#event.msgs[0].tags=='white'")
+    public void ordersMsgListener(MessageEvent event){
+        try {
+            List<MessageExt> msgs = event.getMsgs();
+            for (MessageExt msg : msgs) {
+                //通过webSocket发送给前端
+//                System.out.println(new String(msg.getBody()));
+                WebSocketServer.sendInfo( new String(msg.getBody()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
