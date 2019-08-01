@@ -12,6 +12,7 @@
     <script src="js/holder.js"></script>
     <script src="lib/vue.js"></script>
     <script src="lib/axios.js"></script>
+
     <style>
         .v-enter,
         .v-leave-to{
@@ -73,10 +74,10 @@
                 <transition  mode="out-in">
                     <component :is="comName" v-bind:typelist="typeList" v-bind:goodslist="goodsList" ></component>
                 </transition>
+
             </div>
         </div>
     </div>
-
 </div> <!--app-->
 
 <!--菜品列表-->
@@ -126,11 +127,14 @@
                     <td>{{goods.goodsName}}</td>
                     <td>{{goods.goodsPrice}}</td>
                     <td>{{goods.goodsTotal}}</td>
-                    <td>{{goods.goodsImgUrl}}</td>
+                    <td>
+                        <a :href="goods.goodsImgUrl">图片</a>
+                        <!--<img :src="goods.goodsImgUrl">-->
+                    </td>
                     <td>{{goods.dcGoodsType}}</td>
                     <td>{{goods.goodsDetails}}</td>
                     <td>
-                        <button class="btn btn-default" >修改</button>
+                        <button class="btn btn-default"  >修改</button>
                         <button class="btn btn-default" @click="deletegoods(goods.goodsId)" >删除</button>
                     </td>
                 </tr>
@@ -144,22 +148,22 @@
     <div class="row">
         <div class="col-md-6">
             <h2 class="sub-header">添加菜品</h2>
-            <form>
+            <form action="http://localhost:8080/dcsystem/addGoods" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="goodsName">菜品名</label>
-                    <input type="text" class="form-control" id="goodsName" placeholder="菜品名">
+                    <input type="text" name="goodsName" class="form-control" id="goodsName" placeholder="菜品名">
                 </div>
                 <div class="form-group">
                     <label for="goodsPrice">价格</label>
-                    <input type="text" class="form-control" id="goodsPrice" placeholder="价格">
+                    <input type="text" name="goodsPrice" class="form-control" id="goodsPrice" placeholder="价格">
                 </div>
                 <div class="form-group">
                     <label for="goodsTotal">数量</label>
-                    <input type="text" class="form-control" id="goodsTotal" placeholder="数量">
+                    <input type="text" name="goodsTotal" class="form-control" id="goodsTotal" placeholder="数量">
                 </div>
                 <div class="form-group">
                     <label>类别</label>
-                    <select v-model="selected" class="form-control">
+                    <select v-model="typeId" name="goodsType.typeId" class="form-control">
                         <option disabled value="">请选择</option>
                         <option v-for="type in typelist"  :value="type.typeId">
                             {{type.typeName}}
@@ -168,13 +172,13 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputFile">图片</label>
-                    <input type="file" id="exampleInputFile">
+                    <input type="file" name="goodsImg" id="exampleInputFile">
                 </div>
                 <div class="form-group">
                     <label for="goodsDetails">详情</label>
-                    <textarea type="text" class="form-control" id="goodsDetails" placeholder="详情"></textarea>
+                    <textarea type="text" name="goodsDetails" class="form-control" id="goodsDetails" placeholder="详情"></textarea>
                 </div>
-                <button type="submit" class="btn btn-default">添加</button>
+                <button type="submit" class="btn btn-default" >添加</button>
             </form>
         </div>
         </div>
@@ -235,7 +239,7 @@
                     selected:"",
                     goodsName:"",
                     startPrice:null,
-                    endPrice:null,
+                    endPrice:null
                 }
             },
             methods:{
@@ -262,6 +266,7 @@
                     });
                 },
                 deletegoods(id){
+                    var vm = this;
                     if(confirm("你确定要删除该商品吗？")){
                         $.ajax({
                             url:"http://localhost:8080/dcsystem/deleteGoods",
@@ -270,8 +275,8 @@
                                 goodsId:id
                             },
                             success:function (data) {
-                                // alert(data);
-                                vm.goodslist = data;
+                                 // alert(data);
+                                 vm.goodslist = data;
                             }
                         });
                     }
@@ -284,7 +289,9 @@
             template:"#addDishes",
             props:['typelist'],
             data:function () {
-                return { selected:""}
+                return {
+                    selected:""
+                }
             }
         });
         //添加类别

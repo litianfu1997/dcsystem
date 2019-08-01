@@ -37,4 +37,10 @@ public interface IDcGoodsService {
      * @param dcGoods
      */
     void deleteGoodsByGoodsId(DcGoods dcGoods);
+
+    /**
+     * 插入商品信息
+     * @param dcGoods
+     */
+    void addDcGoods(DcGoods dcGoods);
 }

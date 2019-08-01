@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author litianfu
@@ -65,6 +66,12 @@ public class DcGoodsServiceImpl implements IDcGoodsService {
     @Override
     public void deleteGoodsByGoodsId(DcGoods dcGoods) {
         goodsMapper.deleteGoodsByGoodsId(dcGoods);
+    }
+
+    @Override
+    public void addDcGoods(DcGoods dcGoods) {
+        dcGoods.setGoodsId(UUID.randomUUID().toString());
+        goodsMapper.addDcGoods(dcGoods);
     }
 
 
