@@ -3,9 +3,46 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzkj.dcsystem.dao.DcGoodsMapper">
+    <update id="updateGoods" parameterType="DcGoods">
+        update dc_goods
+        <trim prefix="set" suffixOverrides=",">
+            <if test="goodsName != null and goodsName != ''">
+                goods_name = #{goodsName},
+            </if>
+            <if test="goodsPrice != null ">
+                goods_price = #{goodsPrice},
+            </if>
+            <if test="goodsType != null ">
+                type_id = #{goodsType.typeId},
+            </if>
+            <if test="goodsTotal != null">
+                goods_total = #{goodsTotal},
+            </if>
+            <if test="goodsImgUrl != null and goodsImgUrl != ''">
+                goods_img_url = #{goodsImgUrl},
+            </if>
+            <if test="goodsDetails != null and goodsDetails != ''">
+                goods_details = #{goodsDetails},
+            </if>
+        </trim>
+        where goods_id = #{goodsId}
+    </update>
 
-    <select id="selectGoods" parameterType="com.zzkj.dcsystem.controller.utils.DcGoodsQueryVo" resultType="dcGoods">
-        select * from dc_goods
+
+    <select id="getAllGoods" resultMap="Goods">
+        select goods_id,goods_name,goods_price,goods_total,goods_img_url,goods_details,
+        dgt.type_id,dgt.type_name
+        from dc_goods dg
+        left join  dc_goods_type dgt
+        on dg.type_id = dgt.type_id
+    </select>
+
+    <select id="selectGoods" parameterType="com.zzkj.dcsystem.controller.utils.DcGoodsQueryVo" resultMap="Goods" >
+        select goods_id,goods_name,goods_price,goods_total,goods_img_url,goods_details,
+        dgt.type_id,dgt.type_name
+        from dc_goods dg
+        left join  dc_goods_type dgt
+        on dg.type_id = dgt.type_id
         <where>
             <if test=" goodsName != null and goodsName != ''">
               and goods_name like #{goodsName}
@@ -17,10 +54,35 @@
                 and goods_price <![CDATA[<=]]> #{endPrice}
             </if>
             <if test=" typeId != null and typeId != ''">
-                and type_id = #{typeId}
+                and dg.type_id = #{typeId}
             </if>
         </where>
     </select>
+
+
+
+    <select id="getGoodsById" parameterType="String" resultMap="Goods">
+        select
+        goods_id,goods_name,goods_price,goods_total,goods_img_url,goods_details,
+        dgt.type_id,dgt.type_name
+        from dc_goods dg
+        left join  dc_goods_type dgt
+        on dg.type_id = dgt.type_id
+        where goods_id = #{goodsId}
+    </select>
+    <resultMap id="Goods" type="DcGoods">
+        <id column="goods_id" property="goodsId"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="goods_price" property="goodsPrice"/>
+        <result column="goods_total" property="goodsTotal"/>
+        <result column="goods_img_url" property="goodsImgUrl"/>
+        <result column="goods_details" property="goodsDetails"/>
+        <association property="goodsType" >
+            <id column="type_id" property="typeId"/>
+            <result column="type_name" property="typeName"/>
+        </association>
+    </resultMap>
+
 
 
 

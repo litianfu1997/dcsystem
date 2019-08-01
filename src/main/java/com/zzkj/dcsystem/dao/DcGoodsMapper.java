@@ -29,6 +29,8 @@ public interface DcGoodsMapper {
      */
     @Select("select * from dc_goods where goods_id = #{goodsId}")
     DcGoods selectGoodsById(@Param("goodsId")String goodsId);
+
+
     @Select("select * from dc_goods,dc_goods_type where dc_goods.type_id=dc_goods_type.type_id")
     List<DcGoodsType> selectGoodsType();
 
@@ -51,7 +53,27 @@ public interface DcGoodsMapper {
      * 插入商品数据数据
      * @param dcGoods
      */
-    @Insert("insert into dc_goods(goods_id,goods_name,goods_price,goods_total,goods_img_url,type_id)" +
-            " values(#{goodsId},#{goodsName},#{goodsPrice},#{goodsTotal},#{goodsImgUrl},#{goodsType.typeId})")
+    @Insert("insert into dc_goods(goods_id,goods_name,goods_price,goods_total,goods_img_url,type_id,goods_details)" +
+            " values(#{goodsId},#{goodsName},#{goodsPrice},#{goodsTotal},#{goodsImgUrl},#{goodsType.typeId},#{goodsDetails})")
     void addDcGoods(DcGoods dcGoods);
+
+    /**
+     * 根据id查找商品，封装有类别id
+     * @param goodsId
+     * @return
+     */
+    DcGoods getGoodsById(String goodsId);
+
+
+    /**
+     * 查询所有商品，封装有类别信息
+     * @return
+     */
+    List<DcGoods> getAllGoods();
+
+    /**
+     * 修改商品
+     * @param dcGoods
+     */
+    void updateGoods(DcGoods dcGoods);
 }

@@ -43,4 +43,24 @@ public interface IDcGoodsService {
      * @param dcGoods
      */
     void addDcGoods(DcGoods dcGoods);
+
+    /**
+     * 通过goodId查询商品信息,封装有类别信息
+     * @param goodsId
+     * @return
+     */
+    DcGoods getGoodsById(String goodsId);
+
+    /**
+     *
+     * 查询所有的商品信息,封装有类别信息
+     * @return
+     */
+    List<DcGoods> getAllGoods();
+
+    /**
+     * 修改数据
+     * @param dcGoods
+     */
+    void updateGoods(DcGoods dcGoods);
 }
