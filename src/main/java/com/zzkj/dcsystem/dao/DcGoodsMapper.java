@@ -3,10 +3,7 @@ package com.zzkj.dcsystem.dao;
 import com.zzkj.dcsystem.controller.utils.DcGoodsQueryVo;
 import com.zzkj.dcsystem.entity.DcGoods;
 import com.zzkj.dcsystem.entity.DcGoodsType;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -48,4 +45,13 @@ public interface DcGoodsMapper {
      */
     @Delete("delete from dc_goods where goods_id = #{goodsId}")
     void deleteGoodsByGoodsId(DcGoods dcGoods);
+
+    /**
+     *
+     * 插入商品数据数据
+     * @param dcGoods
+     */
+    @Insert("insert into dc_goods(goods_id,goods_name,goods_price,goods_total,goods_img_url,type_id)" +
+            " values(#{goodsId},#{goodsName},#{goodsPrice},#{goodsTotal},#{goodsImgUrl},#{goodsType.typeId})")
+    void addDcGoods(DcGoods dcGoods);
 }
