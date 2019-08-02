@@ -58,67 +58,67 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li :class="{'active':active[0]}"><a href="" @click.prevent="changeCom('unfinished',0)">今日未完成的订单 <span class="sr-only">(current)</span></a></li>
-                    <li :class="{'active':active[1]}"><a href="" @click.prevent="changeCom('finished',1)">今日已完成的订单</a></li>
-                    <li :class="{'active':active[2]}"><a href="" @click.prevent="changeCom('all',2)">所有订单</a></li>
+                    <li :class="{'active':active[0]}"><a href="" @click.prevent="changeCom('unfinished',0)">未完成的订单 <span class="sr-only">(current)</span></a></li>
+                    <li :class="{'active':active[1]}"><a href="" @click.prevent="changeCom('all',1),getAllOrder()">所有订单</a></li>
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <transition  mode="out-in">
-                    <component :is="comName" ></component>
+                    <component :is="comName"  v-on:change="changeAllOrders" v-on:func1="changeModel1" v-on:func2="changeModel2" v-bind:allorder="allOrder" v-bind:unfinishedorder="unfinishedOrder" v-bind:aaa="aaa"></component>
                 </transition>
             </div>
         </div>
     </div>
+    <!--模态框-->
+    <div class="modal fade" tabindex="-1" id="myModal" role="dialog" aria-labelledby="gridSystemModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">详情</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3">联系人</div>
+                        <div class="col-md-9">{{aaa.linkman}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">联系电话</div>
+                        <div class="col-md-9">{{aaa.phone}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">用餐地址</div>
+                        <div class="col-md-9">{{aaa.userAddress}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">订单内容</div>
+                        <div class="col-md-9">
+                            <span v-for="ordersGoods in aaa.goodsList">{{ordersGoods.goods.goodsName}}*{{ordersGoods.amount}},</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">创建时间</div>
+                        <div class="col-md-9">{{aaa.createDate}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">备注</div>
+                        <div class="col-md-9">{{aaa.note}}===={{aaa.evaluation}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">订单状态</div>
+                        <div class="col-md-9">
+                            <span v-if="aaa.finishFlag">已完成</span>
+                            <span v-else>未完成</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"  data-dismiss="modal">确定</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
-<!--模态框-->
-<div class="modal fade" tabindex="-1" id="myModal" role="dialog" aria-labelledby="gridSystemModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel">详情</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-3">序号</div>
-                    <div class="col-md-9">1</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">联系人</div>
-                    <div class="col-md-9">蒋先生</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">联系电话</div>
-                    <div class="col-md-9">1837****879</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">用餐地址</div>
-                    <div class="col-md-9">到店</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">订单内容</div>
-                    <div class="col-md-9">剁椒鱼头，四喜丸子</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">创建时间</div>
-                    <div class="col-md-9">2019-07-26</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">备注</div>
-                    <div class="col-md-9">所有菜微辣</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">订单状态</div>
-                    <div class="col-md-9">未完成</div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary"  data-dismiss="modal">确定</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 </div> <!--app-->
 
@@ -141,79 +141,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>{{name}}</td>
-                    <td>1837****879</td>
-                    <td>到店</td>
-                    <td>剁椒鱼头，四喜丸子</td>
-                    <td>2019-07-26</td>
-                    <td>所有菜微辣</td>
+                <tr v-for="(orders,index) in unfinishedorder">
+                    <td>{{index}}</td>
+                    <td>{{orders.linkman}}</td>
+                    <td>{{orders.phone}}</td>
+                    <td>{{orders.userAddress}}</td>
                     <td>
-                        <button class="btn btn-default" data-toggle="modal" data-target="#myModal" >详情</button>
-                        <button class="btn btn-default" >完成</button>
+                        <span v-for="ordersGoods in orders.goodsList">{{ordersGoods.goods.goodsName}}*{{ordersGoods.amount}},</span>
                     </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>李先生</td>
-                    <td>1597****537</td>
-                    <td>到店</td>
-                    <td>剁椒鱼头，四喜丸子</td>
-                    <td>2019-07-26</td>
-                    <td>加糖，致死量</td>
+                    <td>{{orders.createDate}}</td>
+                    <td>{{orders.note}}===={{orders.evaluation}}</td>
                     <td>
-                        <button class="btn btn-default" data-toggle="modal" data-target="#myModal" >详情</button>
-                        <button class="btn btn-default" >完成</button>
+                        <button class="btn btn-default" data-toggle="modal" data-target="#myModal" @click.prevent="showInfo(index)" >详情</button>
+                        <button class="btn btn-default" @click.prevent="finishOrders(orders.ordersId)" >完成</button>
                     </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</template>
-
-<!--已完成订单-->
-<template id="finished">
-    <div>
-        <h2 class="sub-header">已完成订单</h2>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>序号</th>
-                    <th>联系人</th>
-                    <th>联系电话</th>
-                    <th>用餐地址</th>
-                    <th>订单内容</th>
-                    <th>创建时间</th>
-                    <th>备注</th>
-                    <th>查看详情</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>蒋先生</td>
-                    <td>1837****879</td>
-                    <td>到店</td>
-                    <td>剁椒鱼头，四喜丸子</td>
-                    <td>2019-07-26</td>
-                    <td>所有菜微辣</td>
-                    <td>
-                        <button class="btn btn-default" data-toggle="modal" data-target="#myModal" >详情</button>
-                        <button class="btn btn-default" >完成</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>李先生</td>
-                    <td>1597****537</td>
-                    <td>到店</td>
-                    <td>剁椒鱼头，四喜丸子</td>
-                    <td>2019-07-26</td>
-                    <td>加糖，致死量</td>
-                    <td><a>查看详情</a></td>
                 </tr>
                 </tbody>
             </table>
@@ -225,6 +166,31 @@
 <template id="all">
     <div>
         <h2 class="sub-header">所有订单</h2>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="selectLinkman">联系人</label>
+                <input v-model="selectLinkman" type="text" class="form-control" id="selectLinkman" placeholder="联系人">
+            </div>
+            <div class="form-group">
+                <label for="selectPhone">联系电话</label>
+                <input v-model="selectPhone" type="text" class="form-control" id="selectPhone" placeholder="联系电话">
+            </div>
+            <div class="form-group">
+                <label >时间</label>
+                <input v-model="startDate" type="date" class="form-control">~<input v-model="endDate" type="date" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>状态</label>
+                <select v-model="finishFlag" class="form-control">
+                    <option value="">所有</option>
+                    <option value="true">已完成</option>
+                    <option value="false">未完成</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button @click.prevent="selectOrders()" class="btn btn-default" >查询</button>
+            </div>
+        </form>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -240,56 +206,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>蒋先生</td>
-                    <td>1837****879</td>
-                    <td>到店</td>
-                    <td>剁椒鱼头，四喜丸子</td>
-                    <td>2019-07-26</td>
-                    <td>所有菜微辣</td>
-                    <td><a>查看详情</a></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>李先生</td>
-                    <td>1597****537</td>
-                    <td>到店</td>
-                    <td>剁椒鱼头，四喜丸子</td>
-                    <td>2019-07-26</td>
-                    <td>加糖，致死量</td>
-                    <td><a>查看详情</a></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>李先生</td>
-                    <td>1597****537</td>
-                    <td>到店</td>
-                    <td>剁椒鱼头，四喜丸子</td>
-                    <td>2019-07-26</td>
-                    <td>加糖，致死量</td>
-                    <td><a>查看详情</a></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>李先生</td>
-                    <td>1597****537</td>
-                    <td>到店</td>
-                    <td>剁椒鱼头，四喜丸子</td>
-                    <td>2019-07-26</td>
-                    <td>加糖，致死量</td>
-                    <td><a>查看详情</a></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>李先生</td>
-                    <td>1597****537</td>
-                    <td>到店</td>
-                    <td>剁椒鱼头，四喜丸子</td>
-                    <td>2019-07-26</td>
-                    <td>加糖，致死量</td>
-                    <td><a>查看详情</a></td>
-                </tr>
+                    <tr v-for="(orders,index) in allorder">
+                        <td>{{index}}</td>
+                        <td>{{orders.linkman}}</td>
+                        <td>{{orders.phone}}</td>
+                        <td>{{orders.userAddress}}</td>
+                        <td>
+                            <span v-for="ordersGoods in orders.goodsList">{{ordersGoods.goods.goodsName}}*{{ordersGoods.amount}},</span>
+                        </td>
+                        <td>{{orders.createDate}}</td>
+                        <td>{{orders.note}}===={{orders.evaluation}}</td>
+                        <td>
+                            <button class="btn btn-default" data-toggle="modal" data-target="#myModal" @click.prevent="showInfo(index)" >详情</button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -299,34 +229,63 @@
 
 
     <script>
-
         //未完成订单的模板
         Vue.component("unfinished",{
             template:"#unfinished",
+            props:["unfinishedorder"],
             data: function () {
-                    return {
-                        name:"王先生",
-                    };
+                    return {};
                 },
-            methods: {}
-
-        });
-        //已完成订单的模板
-        Vue.component("finished",{
-            template:"#finished",
-            data: function () {
-                return {
-                    name:"王先生"
-                };
+            methods: {
+                showInfo(index){
+                    this.$emit("func1",index);
+                },
+                finishOrders(ordersId){
+                    window.location.href = "http://localhost:8080/dcsystem/finishOrders?ordersId="+ordersId;
+                }
             }
         });
+
         //所有订单的模板
         Vue.component("all",{
             template:"#all",
+            props:["allorder"],
             data: function () {
                 return {
-                    name:"王先生"
+                    selectLinkman:"",
+                    selectPhone:"",
+                    startDate:"",
+                    endDate:"",
+                    finishFlag:""
                 };
+            },
+            methods: {
+                showInfo(index){
+                    this.$emit("func2",index);
+                },
+                selectOrders(){
+                    var linkman = this.selectLinkman;
+                    var phone = this.selectPhone;
+                    var startDate = this.startDate;
+                    var endDate = this.endDate;
+                    var finishFlag = this.finishFlag;
+                    var vm = this;
+                    $.ajax({
+                        url:"http://localhost:8080/dcsystem/selectOrders",
+                        type:"POST",
+                        data:{
+                            linkman:linkman,
+                            phone:phone,
+                            startDate:startDate,
+                            endDate:endDate,
+                            finishFlag:finishFlag
+                        },
+                        success:function (data) {
+                            // alert(data);
+                            vm.$emit("change",data);
+                        }
+                    });
+                }
             }
         });
 
@@ -334,10 +293,12 @@
             el:"#app",
             data:{
                 comName:"unfinished",
-                active:[true,false,false],
+                active:[true,false],
                 websock:null,
                 webSocketConFlag:null,
-                msg:null
+                unfinishedOrder:[],
+                allOrder:[],
+                aaa:""
             },
             mounted() {
                 if ('WebSocket' in window) {
@@ -351,6 +312,31 @@
                 this.onbeforeunload()
             },
             methods:{
+                changeAllOrders(newOrdersList){
+                    this.allOrder = newOrdersList;
+                },
+                getAllOrder(){
+                    //获取所有订单
+                    var vm = this;
+                    $.ajax({
+                        url:"http://localhost:8080/dcsystem/getAllOrder",
+                        type:"POST",
+                        success:function (data) {
+                            // alert(data);
+                            //给今日订单赋值
+                            vm.allOrder = data;
+                        }
+                    });
+
+                },
+                changeModel1(index){
+                    //修改模态框中的值
+                    this.aaa = this.unfinishedOrder[index];
+                },
+                changeModel2(index){
+                    //修改模态框中的值
+                    this.aaa = this.allOrder[index];
+                },
                 //改变模板
                 changeCom(name,flag){
                     this.comName = name;
@@ -379,8 +365,19 @@
                     this.webSocketConFlag = this.websock.readyState;
                 },
                 setOnmessageMessage(e){
-                    this.msg = e.data;
-                    alert(this.msg+"......."+this.webSocketConFlag);
+                    //信息接收
+                    var orders = JSON.parse(e.data);
+                    if(orders instanceof Array){
+                        //如果它是一个数组
+                        this.unfinishedOrder = orders;
+                    }
+                    else{
+                        //否则将元素加入数组
+                        this.unfinishedOrder.push(orders);
+                    }
+
+                    // this.msg = e.data;
+                    // alert(this.msg+"......."+this.webSocketConFlag);
                 },
                 setOncloseMessage(){
                     this.webSocketConFlag = this.websock.readyState;

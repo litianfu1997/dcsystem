@@ -1,5 +1,7 @@
 package com.zzkj.dcsystem.service.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.zzkj.dcsystem.dao.DcOrderMapper;
 import com.zzkj.dcsystem.dto.MyOrdersDto;
 import com.zzkj.dcsystem.dto.OrdersDto;
@@ -7,8 +9,13 @@ import com.zzkj.dcsystem.entity.DcOrders;
 import com.zzkj.dcsystem.entity.DcOrdersGoods;
 import com.zzkj.dcsystem.service.IDcOrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,6 +29,9 @@ public class DcOrdersServiceServiceImpl implements IDcOrdersService {
 
     @Autowired
     private DcOrderMapper orderMapper;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     /**
      * 插入订单
      *
@@ -56,4 +66,29 @@ public class DcOrdersServiceServiceImpl implements IDcOrdersService {
     public boolean insertOrderGoods(MyOrdersDto ordersGoods) {
         return orderMapper.insertOrderGoods(ordersGoods);
     }
+
+    @Override
+    public void finishOrders(String ordersId) {
+        //修改订单的完成标志为true
+        orderMapper.updateFinishFlagTrueById(ordersId);
+
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        //从缓存中获取未完成订单的列表
+        String unFinishOrdersListStr = ops.get("unFinishOrdersList");
+        if(unFinishOrdersListStr != null && !"".equals(unFinishOrdersListStr)){
+            Gson gson = new Gson();
+            List list = gson.fromJson(unFinishOrdersListStr, List.class);
+            for (int i = 0;i < list.size();i++){
+                LinkedTreeMap o = (LinkedTreeMap)list.get(i);
+                if(o.get("ordersId").equals(ordersId)){
+                    list.remove(i);
+                    break;
+                }
+            }
+            //写回缓存
+            String json = gson.toJson(list);
+            ops.set("unFinishOrdersList",json);
+        }
+    }
+
 }

@@ -2,7 +2,12 @@ package com.zzkj.dcsystem.controller.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -19,12 +24,30 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @ServerEndpoint(value = "/webSocket")
 @Component
 public class WebSocketServer {
-    //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
+    /**
+     * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
+     */
     private static CopyOnWriteArraySet<WebSocketServer> webSocketServers = new CopyOnWriteArraySet<WebSocketServer>();
-    //与某个客户端的连接会话，需要通过它来给客户端发送数据
+    /**
+     * 与某个客户端的连接会话，需要通过它来给客户端发送数据
+     */
+
     private Session session;
 
     private  final static Logger log = LoggerFactory.getLogger(WebSocketServer.class);
+
+    private static ApplicationContext applicationContext;
+
+    public static void setApplicationContext(ApplicationContext applicationContext) {
+        WebSocketServer.applicationContext = applicationContext;
+    }
+
+    //    private static StringRedisTemplate stringRedisTemplate;
+//
+//    @Autowired
+//    public static void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
+//        WebSocketServer.stringRedisTemplate = stringRedisTemplate;
+//    }
 
     public WebSocketServer(){
         log.info("初始化");
@@ -41,6 +64,16 @@ public class WebSocketServer {
         //将本次连接的对象加入socket集合中
         webSocketServers.add(this);
         log.info("有新客户端连接");
+
+        //将缓存中的数据拿出，发送到客户端
+        StringRedisTemplate stringRedisTemplate = applicationContext.getBean(StringRedisTemplate.class);
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        String unFinishOrdersList = ops.get("unFinishOrdersList");
+        if(unFinishOrdersList!=null && !"".equals(unFinishOrdersList)){
+            //如果不为空
+            WebSocketServer.sendInfo(unFinishOrdersList);
+        }
+
     }
 
     /**

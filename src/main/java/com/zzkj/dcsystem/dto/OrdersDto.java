@@ -16,7 +16,7 @@ public class OrdersDto {
     private String ordersId;
     private String linkMan;
     private String phone;
-    private Date createDate;
+    private String createDate;
     private String note;
     private String storeAddress;
     private String userAddress;

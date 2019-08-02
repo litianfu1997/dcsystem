@@ -1,6 +1,7 @@
 package com.zzkj.dcsystem.controller;
 
 import com.google.gson.Gson;
+import com.zzkj.dcsystem.controller.utils.DcOrdersQueryVo;
 import com.zzkj.dcsystem.dto.*;
 import com.zzkj.dcsystem.entity.DcOrders;
 import com.zzkj.dcsystem.service.DcOrdersService;
@@ -10,6 +11,7 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.apache.rocketmq.common.message.Message;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +62,9 @@ public class DcOrdersController {
         orders.setUserId(ordersGoodsDto.getUserId());
         orders.setLinkMan(ordersGoodsDto.getLinkMan());
         orders.setPhone(ordersGoodsDto.getPhone());
-        orders.setCreateDate(ordersGoodsDto.getCreateDate());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String format = sdf.format(new Date());
+        orders.setCreateDate(format);
         orders.setNote(ordersGoodsDto.getNote());
         orders.setStoreAddress(ordersGoodsDto.getStoreAddress());
         orders.setUserAddress(ordersGoodsDto.getUserAddress());
@@ -101,7 +107,8 @@ public class DcOrdersController {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
+                //放入缓存
+                this.redisCacheUnFinishOrders(mqOrders);
 
                 return new ResponseMessage("success","订单已完成");
             }else {
@@ -113,13 +120,45 @@ public class DcOrdersController {
         return new ResponseMessage("error","订单信息为空！");
 
     }
-  
-  
+
+    /**
+     * 查询订单
+     * @param orders
+     * @return
+     */
     @RequestMapping("/order/selectOrder.action")
     public @ResponseBody List<OrdersDto> selectOrder(@RequestBody DcOrders orders) {
         List<OrdersDto> ordersList = ordersService.selectOrderByUserId(orders.getUser().getUserId());
         return ordersList;
 
+    }
+
+    @RequestMapping("/selectOrders")
+    public @ResponseBody List<DcOrders> selectOrders(DcOrdersQueryVo queryVo){
+
+        List<DcOrders> list = dcOrdersService.selectOrders(queryVo);
+        return list;
+
+    }
+
+    @RequestMapping(value = "/getAllOrder")
+    public @ResponseBody List<DcOrders> getAllOrder(){
+        List<DcOrders> list = dcOrdersService.getAllOrder();
+        return list;
+    }
+
+    /**
+     * 完成订单
+     * @param ordersId
+     * @return
+     */
+    @RequestMapping(value = "/finishOrders")
+    public String finishOrders(String ordersId){
+        //完成订单
+        ordersService.finishOrders(ordersId);
+
+        //重定向到订单页面
+        return "redirect:/toOrders";
     }
 
     /**
@@ -133,29 +172,50 @@ public class DcOrdersController {
         ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
         String json = ops.get("DcOrdersList:"+ userId);
         List<DcOrders> dcOrdersList = null;
-//        logger.info("用户:"+userId+"查询订单信息");
         if(json == null || "".equals(json)){
             //如果没有
             //根据用户id获取订单列表
             dcOrdersList = dcOrdersService.getDcOrdersListByUserId(userId);
             //放入缓存
-            this.redisCache(userId,dcOrdersList);
-//            logger.info("用户:从数据库中获取");
+            this.redisCacheUserOrders(userId,dcOrdersList);
         }
         else{
             dcOrdersList = new Gson().fromJson(json,List.class);
-//            logger.info("用户:从缓存中获取");
         }
         //返回
         return ResponseEntity.status(HttpStatus.OK).body(dcOrdersList);
     }
+
+    private void redisCacheUnFinishOrders(DcOrders orders){
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        //从缓存中获取未完成订单的集合
+        String unFinishOrdersListStr = ops.get("unFinishOrdersList");
+        List<DcOrders> unFinishOrdersList = null;
+        Gson gson = new Gson();
+        if (unFinishOrdersListStr == null || "".equals(unFinishOrdersListStr)){
+            //如果为空，新建未完成订单集合
+            unFinishOrdersList = new ArrayList<DcOrders>();
+            //添加新订单
+            unFinishOrdersList.add(orders);
+        }
+        else {
+            //如果不为空,转成对象
+            unFinishOrdersList = gson.fromJson(unFinishOrdersListStr, List.class);
+            //添加新订单
+            unFinishOrdersList.add(orders);
+        }
+        //将集合json化
+        String json = gson.toJson(unFinishOrdersList);
+        ops.set("unFinishOrdersList",json);
+    }
+
 
     /**
      * 缓存用户的userId和订单列表
      * @param userId
      * @param dcOrdersList
      */
-    private void redisCache(String userId,List<DcOrders> dcOrdersList){
+    private void redisCacheUserOrders(String userId,List<DcOrders> dcOrdersList){
         ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
         //将订单列表json化
         Gson gson = new Gson();
