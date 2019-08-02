@@ -1,5 +1,6 @@
 package com.zzkj.dcsystem.dao;
 
+import com.zzkj.dcsystem.controller.utils.DcOrdersQueryVo;
 import com.zzkj.dcsystem.entity.DcOrders;
 import com.zzkj.dcsystem.entity.DcUser;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,9 +24,22 @@ public interface DcOrdersMapper {
     public List<DcOrders> selectOrdersByUserId(DcUser user);
 
     /**
-     * 通过订单id获订单的所有信息，包括订单中的商品
+     * 通过订单id获未完成订单的所有信息
      * @param ordersId
      * @return
      */
-    DcOrders selectDcOrderByOrderId(String ordersId);
+    DcOrders selectUnDcOrderByOrderId(String ordersId);
+
+    /**
+     * 获取所有订单信息
+     * @return
+     */
+    List<DcOrders> getAllOrder();
+
+    /**
+     * 条件查询
+     * @param queryVo
+     * @return
+     */
+    List<DcOrders> selectOrders(DcOrdersQueryVo queryVo);
 }

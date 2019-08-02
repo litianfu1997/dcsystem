@@ -34,4 +34,11 @@ public interface IDcOrdersService {
      */
     boolean insertOrderGoods(MyOrdersDto ordersGoods);
 
+    /**
+     * 完成订单
+     * @param ordersId
+     */
+    void finishOrders(String ordersId);
+
+
 }

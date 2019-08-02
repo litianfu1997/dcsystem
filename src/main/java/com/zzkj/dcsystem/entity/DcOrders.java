@@ -17,7 +17,7 @@ public class DcOrders {
     private DcUser user;
     private String linkman;
     private String phone;
-    private Date createDate;
+    private String createDate;
     private String note;
     private String storeAddress;
     private String userAddress;
@@ -33,4 +33,9 @@ public class DcOrders {
      * 订单中的商品信息列表
      */
     private List<DcOrdersGoods> goodsList;
+    /**
+     * 是否完成标志
+     */
+    private Boolean finishFlag;
+
 }

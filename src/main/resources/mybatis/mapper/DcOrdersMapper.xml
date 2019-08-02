@@ -4,9 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzkj.dcsystem.dao.DcOrdersMapper">
 
+    <select id="selectOrders" resultMap="selectOrders" parameterType="com.zzkj.dcsystem.controller.utils.DcOrdersQueryVo">
+        select
+        orders_id,linkman,phone,create_date,note,store_address,user_address,combined,evaluation,finish_flag
+        from dc_orders
+        <where>
+            <if test="linkman != null and linkman != ''">
+                and linkman like #{linkman}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like #{phone}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                and create_date <![CDATA[>=]]> #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and create_date <![CDATA[<=]]> #{endDate}
+            </if>
+            <if test="finishFlag != null">
+                and finish_flag = #{finishFlag}
+            </if>
+        </where>
+    </select>
+
+
     <select id="selectOrdersByUserId" resultMap="selectOrders" parameterType="DcUser">
         select
-        orders_id,linkman,phone,create_date,note,store_address,user_address,combined,evaluation
+        orders_id,linkman,phone,create_date,note,store_address,user_address,combined,evaluation,finish_flag
         from dc_orders
         where user_id = #{userId}
     </select>
@@ -20,15 +44,21 @@
         <result column="user_address" property="userAddress"/>
         <result column="combined" property="combined"/>
         <result column="evaluation" property="evaluation" />
+        <result column="finish_flag" property="finishFlag" />
     </resultMap>
 
-    <select id="selectDcOrderByOrderId" resultMap="selectOrders" parameterType="String">
-         select
-        orders_id,linkman,phone,create_date,note,store_address,user_address,combined,evaluation
+    <select id="selectUnDcOrderByOrderId" resultMap="selectOrders" parameterType="String">
+        select
+        orders_id,linkman,phone,create_date,note,store_address,user_address,combined,evaluation,finish_flag
         from dc_orders
-        where orders_id = #{ordersId}
+        where orders_id = #{ordersId} and finish_flag = false
     </select>
 
+    <select id="getAllOrder" resultMap="selectOrders">
+        select
+        orders_id,linkman,phone,create_date,note,store_address,user_address,combined,evaluation,finish_flag
+        from dc_orders
+    </select>
 
 
 </mapper>

@@ -4,10 +4,7 @@ import com.zzkj.dcsystem.dto.MyOrdersDto;
 import com.zzkj.dcsystem.dto.OrdersDto;
 import com.zzkj.dcsystem.entity.DcOrders;
 import com.zzkj.dcsystem.entity.DcOrdersGoods;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -43,4 +40,12 @@ public interface DcOrderMapper {
      */
     @Insert("insert into dc_orders_goods(orders_id,goods_id,amount,total) value(#{ordersId},#{goodsId},#{amount},#{total})")
     boolean insertOrderGoods(MyOrdersDto ordersGoods);
+
+    /**
+     * 通过id将订单修改为已完成i
+     * @param ordersId
+     */
+    @Update("update dc_orders set finish_flag=1 where orders_id=#{ordersId}")
+    void updateFinishFlagTrueById(@Param("ordersId")String ordersId);
+
 }

@@ -1,5 +1,6 @@
 package com.zzkj.dcsystem.service.serviceimpl;
 
+import com.zzkj.dcsystem.controller.utils.DcOrdersQueryVo;
 import com.zzkj.dcsystem.dao.DcOrdersGoodsMapper;
 import com.zzkj.dcsystem.dao.DcOrdersMapper;
 import com.zzkj.dcsystem.dao.DcUserMapper;
@@ -11,6 +12,9 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,7 +64,7 @@ public class DcOrdersServiceImpl implements DcOrdersService {
     @Override
     public DcOrders selectDcOrderByOrderId(String ordersId) {
         //获取订单
-        DcOrders dcOrders =  dcOrdersMapper.selectDcOrderByOrderId(ordersId);
+        DcOrders dcOrders =  dcOrdersMapper.selectUnDcOrderByOrderId(ordersId);
         //通过订单获取订单中的商品
         if(dcOrders != null){
             List<DcOrdersGoods> DcOrdersGoodsList = dcOrdersGoodsMapper.selectDcOrdersGoodsByDcOrders(dcOrders);
@@ -69,5 +73,28 @@ public class DcOrdersServiceImpl implements DcOrdersService {
         }
 
         return dcOrders;
+    }
+
+    @Override
+    public List<DcOrders> getAllOrder() {
+
+        List<DcOrders> list = dcOrdersMapper.getAllOrder();
+        for (int i = 0;i< list.size();i++){
+            List<DcOrdersGoods> dcOrdersGoods = dcOrdersGoodsMapper.selectDcOrdersGoodsByDcOrders(list.get(i));
+            list.get(i).setGoodsList(dcOrdersGoods);
+        }
+        return list;
+    }
+
+    @Override
+    public List<DcOrders> selectOrders(DcOrdersQueryVo queryVo) {
+        queryVo.setLinkman("%" + queryVo.getLinkman() + "%");
+        queryVo.setPhone("%" + queryVo.getPhone() + "%");
+        List<DcOrders> list = dcOrdersMapper.selectOrders(queryVo);
+        for (int i = 0;i< list.size();i++){
+            List<DcOrdersGoods> dcOrdersGoods = dcOrdersGoodsMapper.selectDcOrdersGoodsByDcOrders(list.get(i));
+            list.get(i).setGoodsList(dcOrdersGoods);
+        }
+        return list;
     }
 }

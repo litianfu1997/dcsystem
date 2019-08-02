@@ -1,5 +1,6 @@
 package com.zzkj.dcsystem.service;
 
+import com.zzkj.dcsystem.controller.utils.DcOrdersQueryVo;
 import com.zzkj.dcsystem.entity.DcOrders;
 
 import java.util.List;
@@ -25,4 +26,19 @@ public interface DcOrdersService {
      * @return
      */
     public DcOrders selectDcOrderByOrderId(String ordersId);
+
+    /**
+     * 获取所有订单
+     * @return
+     */
+    List<DcOrders> getAllOrder();
+
+    /**
+     * 根据条件查询订单
+     * @param queryVo
+     * @return
+     */
+    List<DcOrders> selectOrders(DcOrdersQueryVo queryVo);
+
+
 }
