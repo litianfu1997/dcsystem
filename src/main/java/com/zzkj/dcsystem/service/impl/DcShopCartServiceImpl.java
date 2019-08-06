@@ -127,7 +127,7 @@ public class DcShopCartServiceImpl implements IDcShopCartService {
      */
     @Override
     public boolean selectShopCartGoodsByGoodsId(String shopCartId, String goodsId) {
-        Integer existFlag = shopCartGoodsMapper.selectShopCartGoodsByGoodsId(shopCartId, goodsId);
+        ShopCartGoodsDto existFlag = shopCartGoodsMapper.selectShopCartGoodsByGoodsId(shopCartId, goodsId);
         if (existFlag == null){
             return false;
         }else {
