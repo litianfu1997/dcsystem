@@ -12,7 +12,6 @@
     <script src="js/holder.js"></script>
     <script src="lib/vue.js"></script>
     <script src="lib/axios.js"></script>
-
     <style>
         .v-enter,
         .v-leave-to{
@@ -107,23 +106,22 @@
             </div>
         </form>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>序号</th>
-                    <th>菜品id</th>
                     <th>菜品名</th>
                     <th>价格</th>
                     <th>数量</th>
                     <th>图片</th>
                     <th>类型</th>
                     <th>详情</th>
+                    <th>共{{goodslist.length}}条记录</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(goods,index) in goodslist">
                     <td>{{index}}</td>
-                    <td>{{goods.goodsId}}</td>
                     <td>{{goods.goodsName}}</td>
                     <td>{{goods.goodsPrice}}</td>
                     <td>{{goods.goodsTotal}}</td>
@@ -148,22 +146,22 @@
     <div class="row">
         <div class="col-md-6">
             <h2 class="sub-header">添加菜品</h2>
-            <form action="http://localhost:8080/dcsystem/addGoods" method="post" enctype="multipart/form-data">
+            <form id="addDishesFrom" action="http://localhost:8080/dcsystem/addGoods" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="goodsName">菜品名</label>
-                    <input type="text" name="goodsName" class="form-control" id="goodsName" placeholder="菜品名">
+                    <input type="text" v-model="addGoodsName" name="goodsName" class="form-control" id="goodsName" placeholder="此为必填项">
                 </div>
                 <div class="form-group">
                     <label for="goodsPrice">价格</label>
-                    <input type="text" name="goodsPrice" class="form-control" id="goodsPrice" placeholder="价格">
+                    <input type="text" v-model="addGoodsPrice" name="goodsPrice" class="form-control" id="goodsPrice" placeholder="请输入正数">
                 </div>
                 <div class="form-group">
                     <label for="goodsTotal">数量</label>
-                    <input type="text" name="goodsTotal" class="form-control" id="goodsTotal" placeholder="数量">
+                    <input type="text" v-model="addGoodsTotal" name="goodsTotal" class="form-control" id="goodsTotal" placeholder="请输入正整数">
                 </div>
                 <div class="form-group">
                     <label>类别</label>
-                    <select v-model="typeId" name="goodsType.typeId" class="form-control">
+                    <select v-model="addTypeId" name="goodsType.typeId" class="form-control">
                         <option  value="">请选择</option>
                         <option v-for="type in typelist"  :value="type.typeId">
                             {{type.typeName}}
@@ -171,14 +169,14 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputFile">图片</label>
-                    <input type="file" name="goodsImg" id="exampleInputFile">
+                    <label for="exampleInputFile">图片(上传文件必须为图片，否则会出现未知错误)</label>
+                    <input type="file" v-model="addGoodsImg"  name="goodsImg" id="exampleInputFile">
                 </div>
                 <div class="form-group">
                     <label for="goodsDetails">详情</label>
-                    <textarea type="text" name="goodsDetails" class="form-control" id="goodsDetails" placeholder="详情"></textarea>
+                    <textarea type="text" v-model="addGoodsDetails"  name="goodsDetails" class="form-control" id="goodsDetails" placeholder="详情"></textarea>
                 </div>
-                <button type="submit" class="btn btn-default" >添加</button>
+                <button type="button" @click="submit" class="btn btn-default" >添加</button>
             </form>
         </div>
         </div>
@@ -188,21 +186,23 @@
     <div>
         <h2 class="sub-header">类别列表</h2>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>序号</th>
-                    <th>类别id</th>
                     <th>类别名</th>
                     <th>菜品数量</th>
+                    <th>共{{typelist.length}}条记录</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(type,index) in typelist">
                     <td>{{index}}</td>
-                    <td>{{type.typeId}}</td>
                     <td>{{type.typeName}}</td>
                     <td>{{type.goodsNumber}}</td>
+                    <td>
+                        <button v-if="type.goodsNumber == 0" class="btn btn-default" @click="deletetype(type.typeId)" >删除</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -238,8 +238,10 @@
                 return {
                     selected:"",
                     goodsName:"",
-                    startPrice:null,
-                    endPrice:null
+                    startPrice:"",
+                    endPrice:"",
+                    checkConse:[],
+                    ok:true
                 }
             },
             methods:{
@@ -247,26 +249,49 @@
                     window.location.href = "http://localhost:8080/dcsystem/preUpdateGoods?goodsId="+goodsId;
                 },
                 selectgoods(){
-                    // alert(this.selected+"  "+this.goodsName+"  "+this.startPrice+"  "+this.endPrice);
-                    var goodsname = this.goodsName;
-                    var typeid = this.selected;
-                    var startprice = this.startPrice;
-                    var endprice = this.endPrice;
-                    var vm = this;
-                    $.ajax({
-                        url:"http://localhost:8080/dcsystem/selectGoods",
-                        type:"POST",
-                        data:{
-                            goodsName:goodsname,
-                            typeId:typeid,
-                            startPrice:startprice,
-                            endPrice:endprice
-                        },
-                        success:function (data) {
-                            // alert(data);
-                            vm.goodslist = data;
+                    if((!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(this.startPrice)) && this.startPrice !== ""){
+                        //如果格式不对
+                        this.checkConse.push({topic:"起始查询价格:",msg:"必须为正数或为空"});
+                        this.ok = false;
+                    }
+                    if((!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(this.endPrice)) && this.endPrice !== ""){
+                        this.checkConse.push({topic:"结束查询价格:",msg:"必须为正数或为空"});
+                        this.ok = false;
+                    }
+
+                    if(this.ok){
+                        //如果通过验证，发起请求
+                        var goodsname = this.goodsName;
+                        var typeid = this.selected;
+                        var startprice = this.startPrice;
+                        var endprice = this.endPrice;
+                        var vm = this;
+                        $.ajax({
+                            url:"http://localhost:8080/dcsystem/selectGoods",
+                            type:"POST",
+                            data:{
+                                goodsName:goodsname,
+                                typeId:typeid,
+                                startPrice:startprice,
+                                endPrice:endprice
+                            },
+                            success:function (data) {
+                                // alert(data);
+                                vm.goodslist = data;
+                            }
+                        });
+                    }
+                    else {
+                        var str = "";
+                        for (var i = 0;i < this.checkConse.length;i++){
+                            str += this.checkConse[i].topic+":"+this.checkConse[i].msg+"\n";
                         }
-                    });
+                        alert(str);
+                        this.checkConse = [];
+                        //将标志位设置为true
+                        this.ok = true;
+                    }
+
                 },
                 deletegoods(id){
                     var vm = this;
@@ -293,7 +318,64 @@
             props:['typelist'],
             data:function () {
                 return {
-                    typeId:""
+                    addGoodsName:"",
+                    addGoodsPrice:"",
+                    addGoodsTotal:"",
+                    addTypeId:"",
+                    addGoodsImg:"",
+                    addGoodsDetails:"",
+                    checkConse:[],
+                    ok:true
+                }
+            },
+            methods:{
+                submit:function () {
+                    if(this.addGoodsName === ""){
+                        //如果菜品名为空
+                        this.checkConse.push({topic:"菜品名:",msg:"不能为空"});
+                        this.ok = false;
+                    }
+                    if(this.addGoodsPrice === ""){
+                        //如果价格为空
+                        this.checkConse.push({topic:"价格:",msg:"不能为空"});
+                        this.ok = false;
+                    }
+                    if(!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(this.addGoodsPrice)){
+                        //如果价格不满足正数
+                        this.checkConse.push({topic:"价格:",msg:"必须为正数"});
+                        this.ok = false;
+                    }
+                    if(!/^[+]{0,1}(\d+)$/.test(this.addGoodsTotal)){
+                        //如果总数不为正数
+                        this.checkConse.push({topic:"数量:",msg:"必须为正整数"});
+                        this.ok = false;
+                    }
+                    if(this.addTypeId === ""){
+                        //如果没有选择类别
+                        this.checkConse.push({topic:"类别:",msg:"必须选择类别"});
+                        this.ok = false;
+                    }
+
+                    if(this.ok){
+                        //提交表单
+                        $("#addDishesFrom").submit();
+                    }
+                    else{
+                        var str = "";
+                        for (var i = 0;i < this.checkConse.length;i++){
+                            str += this.checkConse[i].topic+":"+this.checkConse[i].msg+"\n";
+                        }
+                        alert(str);
+                        this.checkConse = [];
+                        //将标志位设置为true
+                        this.ok = true;
+                        return false;
+                    }
+                    // if(!this.verify.ok){
+                    //     //如果不成功
+                    //     alert("有字段校验失败");
+                    //
+                    // }
                 }
             }
         });
@@ -328,7 +410,20 @@
         //类别列表
         var typeList = Vue.component("typeList",{
             template:"#TypeList",
-            props:['typelist']
+            props:['typelist'],
+            methods:{
+                deletetype(typeId){
+                    var vm = this;
+                    $.ajax({
+                        url:"http://localhost:8080/dcsystem/deleteType",
+                        type:"POST",
+                        data:{typeId:typeId},
+                        success:function (data) {
+                            vm.typelist = data;
+                        }
+                    });
+                }
+            }
         });
 
         var vm = new Vue({
@@ -337,7 +432,7 @@
                 comName:"listDishes",
                 active:[true,false,false,false,false],
                 typeList:null,
-                goodsList:null,
+                goodsList:null
             },
             created() {
                 var vm = this;

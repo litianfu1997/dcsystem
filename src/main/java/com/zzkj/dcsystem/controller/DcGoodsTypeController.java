@@ -43,6 +43,13 @@ public class DcGoodsTypeController {
         return flag;
     }
 
+    @RequestMapping(value = "/deleteType")
+    public String deleteType(DcGoodsType dcGoodsType){
+        //删除类别
+        dcGoodsTypeService.deleteTypeById(dcGoodsType);
+        //重定向到类别列表
+        return "redirect:/typeList";
+    }
 
 
 }

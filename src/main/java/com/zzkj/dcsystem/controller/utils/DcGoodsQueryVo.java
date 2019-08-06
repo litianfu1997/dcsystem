@@ -13,6 +13,6 @@ import lombok.Data;
 public class DcGoodsQueryVo {
     private String goodsName;
     private String typeId;
-    private Integer startPrice;
-    private Integer endPrice;
+    private Float startPrice;
+    private Float endPrice;
 }

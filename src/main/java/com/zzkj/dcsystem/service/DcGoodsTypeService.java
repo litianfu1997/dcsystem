@@ -25,4 +25,10 @@ public interface DcGoodsTypeService {
      * @return
      */
     Boolean addDcGoodsType(DcGoodsType dcGoodsType);
+
+    /**
+     * 通过id删除类别
+     * @param dcGoodsType
+     */
+    void deleteTypeById(DcGoodsType dcGoodsType);
 }

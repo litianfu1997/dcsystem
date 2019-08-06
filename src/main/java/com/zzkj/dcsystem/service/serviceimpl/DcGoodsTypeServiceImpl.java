@@ -48,4 +48,9 @@ public class DcGoodsTypeServiceImpl implements DcGoodsTypeService {
         }
 
     }
+
+    @Override
+    public void deleteTypeById(DcGoodsType dcGoodsType) {
+        dcGoodsTypeMapper.deleteTypeById(dcGoodsType);
+    }
 }
