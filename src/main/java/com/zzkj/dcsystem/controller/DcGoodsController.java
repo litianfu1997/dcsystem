@@ -125,6 +125,7 @@ public class DcGoodsController {
      */
     @RequestMapping(value = "/addGoods")
     public  String addGoods(HttpServletRequest request,DcGoods dcGoods, @RequestParam(value = "goodsImg") MultipartFile goodsImg){
+
         if (!goodsImg.isEmpty()){
             //生成新文件名文件名(包含后缀)
             String imgName = UUID.randomUUID().toString().replace("-","")+goodsImg.getOriginalFilename();

@@ -1,10 +1,7 @@
 package com.zzkj.dcsystem.dao;
 
 import com.zzkj.dcsystem.entity.DcGoodsType;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -45,4 +42,11 @@ public interface DcGoodsTypeMapper {
      */
     @Insert("insert into dc_goods_type(type_id,type_name) values(#{typeId},#{typeName})")
     void insertDcGoodType(DcGoodsType dcGoodsType);
+
+    /**
+     * 通过id删除类别
+     * @param dcGoodsType
+     */
+    @Delete("delete  from dc_goods_type where type_id = #{typeId}")
+    void deleteTypeById(DcGoodsType dcGoodsType);
 }
