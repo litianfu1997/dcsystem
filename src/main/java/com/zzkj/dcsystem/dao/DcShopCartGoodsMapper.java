@@ -64,7 +64,7 @@ public interface DcShopCartGoodsMapper {
             "and dc_shopCart_goods.goods_id =dc_goods.goods_id\n" +
             "and dc_goods_type.type_id=dc_goods.type_id\n" +
             "and dc_shopCart_goods.shopCart_id=#{shopCartId} and dc_shopCart_goods.goods_id=#{goodsId}")
-    Integer selectShopCartGoodsByGoodsId(@Param("shopCartId")String shopCartId ,@Param("goodsId")String goodsId);
+    ShopCartGoodsDto selectShopCartGoodsByGoodsId(@Param("shopCartId")String shopCartId ,@Param("goodsId")String goodsId);
 
     /**
      * 修改购物车商品的数量和价格总和

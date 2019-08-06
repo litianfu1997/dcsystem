@@ -6,6 +6,7 @@ import com.zzkj.dcsystem.entity.DcGoodsType;
 import com.zzkj.dcsystem.service.DcGoodsTypeService;
 import com.zzkj.dcsystem.service.impl.DcGoodsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,8 @@ import java.util.*;
  */
 @Controller
 public class DcGoodsController {
+    @Value("${file.upload.path}")
+    private String path = "file/";
     @Autowired
     private DcGoodsServiceImpl goodsService;
 
@@ -131,8 +134,12 @@ public class DcGoodsController {
             //获取项目路径
             String contextPath = request.getContextPath();
             //指定文件存放在d盘下
-            File file = new File("D:/file/"+imgName);
+            File file = new File(new File(path).getAbsolutePath()+ "/" +imgName);
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
             try {
+                System.out.println("文件已上传");
                 goodsImg.transferTo(file);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -173,8 +180,12 @@ public class DcGoodsController {
             //获取项目路径
             String contextPath = request.getContextPath();
             //指定文件存放在d盘下
-            File file = new File("D:/file/"+imgName);
+            File file = new File(new File(path).getAbsolutePath()+ "/" +imgName);
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
             try {
+                System.out.println("文件已上传");
                 goodsImg.transferTo(file);
             } catch (IOException e) {
                 e.printStackTrace();
