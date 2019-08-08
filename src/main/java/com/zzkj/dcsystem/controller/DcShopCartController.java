@@ -4,8 +4,8 @@ package com.zzkj.dcsystem.controller;
 import com.zzkj.dcsystem.dto.ResponseMessage;
 import com.zzkj.dcsystem.dto.ShopCartDto;
 import com.zzkj.dcsystem.dto.ShopCartGoodsDto;
-import com.zzkj.dcsystem.service.impl.DcGoodsServiceImpl;
-import com.zzkj.dcsystem.service.impl.DcShopCartServiceImpl;
+import com.zzkj.dcsystem.service.DcGoodsService;
+import com.zzkj.dcsystem.service.DcShopCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +25,9 @@ import java.util.UUID;
 public class DcShopCartController {
 
     @Autowired
-    private DcShopCartServiceImpl shopCartService;
+    private DcShopCartService shopCartService;
     @Autowired
-    private DcGoodsServiceImpl goodsService;
+    private DcGoodsService goodsService;
 
     /**
      * 创建购物车、将商品添加到购物车

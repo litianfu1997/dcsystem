@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 管理员登陆
  * @author JGZ
@@ -25,13 +27,21 @@ public class AdminController {
      * @return
      */
     @RequestMapping("/toMain")
-    public String toOrdersPage(String adminName,String password,String func){
+    public String toOrdersPage(String adminName, String password, String func, HttpServletRequest request){
 
         if(admin.getName().equals(adminName) && admin.getPassword().equals(password)){
             if("订单管理".equals(func)){
+                Admin admin = new Admin();
+                admin.setName(adminName);
+                admin.setPassword(password);
+                request.getSession().setAttribute("admin",admin);
                 return "redirect:/toOrders";
             }
             else if ("菜品管理".equals(func)){
+                Admin admin = new Admin();
+                admin.setName(adminName);
+                admin.setPassword(password);
+                request.getSession().setAttribute("admin",admin);
                 return "redirect:/toDishes";
             }
             else {
