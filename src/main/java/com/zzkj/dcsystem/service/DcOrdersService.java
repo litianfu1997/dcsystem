@@ -1,6 +1,8 @@
 package com.zzkj.dcsystem.service;
 
 import com.zzkj.dcsystem.controller.utils.DcOrdersQueryVo;
+import com.zzkj.dcsystem.dto.MyOrdersDto;
+import com.zzkj.dcsystem.dto.OrdersDto;
 import com.zzkj.dcsystem.entity.DcOrders;
 
 import java.util.List;
@@ -39,6 +41,32 @@ public interface DcOrdersService {
      * @return
      */
     List<DcOrders> selectOrders(DcOrdersQueryVo queryVo);
+
+    /**
+     * 插入订单
+     * @param orders
+     * @return
+     */
+    boolean insertOrder(OrdersDto orders);
+
+    /**
+     * 通过userId查询订单
+     * @param userId
+     * @return
+     */
+    List<OrdersDto> selectOrderByUserId(String userId);
+    /**
+     * 插入订单的商品列表
+     * @param ordersGoods
+     * @return
+     */
+    boolean insertOrderGoods(MyOrdersDto ordersGoods);
+
+    /**
+     * 完成订单
+     * @param ordersId
+     */
+    void finishOrders(String ordersId);
 
 
 }

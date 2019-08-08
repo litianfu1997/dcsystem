@@ -1,10 +1,10 @@
-package com.zzkj.dcsystem.service.impl;
+package com.zzkj.dcsystem.service.serviceimpl;
 
 import com.zzkj.dcsystem.controller.utils.DcGoodsQueryVo;
 import com.zzkj.dcsystem.dao.DcGoodsMapper;
 import com.zzkj.dcsystem.entity.DcGoods;
 import com.zzkj.dcsystem.entity.DcGoodsType;
-import com.zzkj.dcsystem.service.IDcGoodsService;
+import com.zzkj.dcsystem.service.DcGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import java.util.UUID;
  * @date 2019-07-23 14:35
  */
 @Service
-public class DcGoodsServiceImpl implements IDcGoodsService {
+public class DcGoodsServiceImpl implements DcGoodsService {
     @Autowired
     private DcGoodsMapper goodsMapper;
 

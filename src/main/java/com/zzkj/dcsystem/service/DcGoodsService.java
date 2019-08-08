@@ -11,7 +11,7 @@ import java.util.List;
  * @email 1035869369@qq.com
  * @date 2019-07-23 14:39
  */
-public interface IDcGoodsService {
+public interface DcGoodsService {
     /**
      * 查询所有商品
      * @return

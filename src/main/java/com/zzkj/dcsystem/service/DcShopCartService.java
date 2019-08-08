@@ -13,7 +13,7 @@ import java.util.List;
  * @email 1035869369@qq.com
  * @date 2019-07-24 16:14
  */
-public interface IDcShopCartService {
+public interface DcShopCartService {
 
     /**
      * 插入购物车
