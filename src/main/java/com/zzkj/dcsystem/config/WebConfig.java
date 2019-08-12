@@ -1,11 +1,15 @@
 package com.zzkj.dcsystem.config;
 
+import com.zzkj.dcsystem.controller.interceptor.BackInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * web配置类
@@ -25,8 +29,16 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String p = new File(path).getAbsolutePath() + File.separator;
-        System.out.println(p);
-        registry.addResourceHandler("/images/**").addResourceLocations("file:" + p);
+//        String p = new File(path).getAbsolutePath() + File.separator;
+//        System.out.println(p);
+        registry.addResourceHandler("/images/**").addResourceLocations("file:/file/");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        List<String> list = new ArrayList<String>();
+        list.add("/toDishes");
+        list.add("/toOrders");
+        registry.addInterceptor(new BackInterceptor()).addPathPatterns(list);
     }
 }

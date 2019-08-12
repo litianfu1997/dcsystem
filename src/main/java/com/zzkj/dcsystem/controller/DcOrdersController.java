@@ -5,13 +5,12 @@ import com.zzkj.dcsystem.controller.utils.DcOrdersQueryVo;
 import com.zzkj.dcsystem.dto.*;
 import com.zzkj.dcsystem.entity.DcOrders;
 import com.zzkj.dcsystem.service.DcOrdersService;
-import com.zzkj.dcsystem.service.impl.DcOrdersServiceServiceImpl;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.apache.rocketmq.common.message.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,9 +36,6 @@ import java.util.concurrent.TimeUnit;
 
 @Controller
 public class DcOrdersController {
-
-    @Autowired
-    private DcOrdersServiceServiceImpl ordersService;
 
     @Autowired
     private DcOrdersService dcOrdersService;
@@ -76,7 +71,7 @@ public class DcOrdersController {
         orders.setCombined(ordersGoodsDto.getCombined());
         orders.setEvaluation(ordersGoodsDto.getEvaluation());
         if (orders!=null){
-            boolean b = ordersService.insertOrder(orders);
+            boolean b = dcOrdersService.insertOrder(orders);
             List<ShopCartGoodsDto> shopCartGoodsDtos = new ArrayList<>();
             shopCartGoodsDtos = ordersGoodsDto.getGoods();
             for (ShopCartGoodsDto shopCartGoodsDto : shopCartGoodsDtos) {
@@ -88,7 +83,7 @@ public class DcOrdersController {
                 ordersGoods.setGoodsId(goodsId);
                 ordersGoods.setAmount(amount);
                 ordersGoods.setTotal(total);
-                boolean orderGoodsFlag = ordersService.insertOrderGoods(ordersGoods);
+                boolean orderGoodsFlag = dcOrdersService.insertOrderGoods(ordersGoods);
             }
 
             Boolean delete = stringRedisTemplate.delete("DcOrdersList:" + orders.getUserId());
@@ -133,7 +128,7 @@ public class DcOrdersController {
      */
     @RequestMapping("/order/selectOrder.action")
     public @ResponseBody List<OrdersDto> selectOrder(@RequestBody DcOrders orders) {
-        List<OrdersDto> ordersList = ordersService.selectOrderByUserId(orders.getUser().getUserId());
+        List<OrdersDto> ordersList = dcOrdersService.selectOrderByUserId(orders.getUser().getUserId());
         return ordersList;
 
     }
@@ -159,7 +154,7 @@ public class DcOrdersController {
     @RequestMapping(value = "/finishOrders")
     public String finishOrders(String ordersId){
         //完成订单
-        ordersService.finishOrders(ordersId);
+        dcOrdersService.finishOrders(ordersId);
 
         //重定向到订单页面
         return "redirect:/toOrders";

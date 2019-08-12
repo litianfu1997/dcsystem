@@ -3,14 +3,9 @@ package com.zzkj.dcsystem.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zzkj.dcsystem.controller.utils.OpenIdAndSessionKey;
 import com.zzkj.dcsystem.controller.utils.RawData;
-import com.zzkj.dcsystem.service.DcUserService;
-
 import com.zzkj.dcsystem.controller.utils.WxTools;
-import org.apache.rocketmq.client.exception.MQBrokerException;
-import org.apache.rocketmq.client.exception.MQClientException;
+import com.zzkj.dcsystem.service.DcUserService;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

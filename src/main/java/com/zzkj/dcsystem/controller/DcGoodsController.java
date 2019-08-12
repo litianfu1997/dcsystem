@@ -3,8 +3,8 @@ package com.zzkj.dcsystem.controller;
 import com.zzkj.dcsystem.controller.utils.DcGoodsQueryVo;
 import com.zzkj.dcsystem.entity.DcGoods;
 import com.zzkj.dcsystem.entity.DcGoodsType;
+import com.zzkj.dcsystem.service.DcGoodsService;
 import com.zzkj.dcsystem.service.DcGoodsTypeService;
-import com.zzkj.dcsystem.service.impl.DcGoodsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -30,8 +30,9 @@ import java.util.*;
 public class DcGoodsController {
     @Value("${file.upload.path}")
     private String path = "file/";
+
     @Autowired
-    private DcGoodsServiceImpl goodsService;
+    private DcGoodsService goodsService;
 
     @Autowired
     private DcGoodsTypeService dcGoodsTypeService;
@@ -135,7 +136,7 @@ public class DcGoodsController {
             //获取项目路径
             String contextPath = request.getContextPath();
             //指定文件存放在d盘下
-            File file = new File(new File(path).getAbsolutePath()+ "/" +imgName);
+            File file = new File( "D:/file/" +imgName);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
@@ -181,7 +182,7 @@ public class DcGoodsController {
             //获取项目路径
             String contextPath = request.getContextPath();
             //指定文件存放在d盘下
-            File file = new File(new File(path).getAbsolutePath()+ "/" +imgName);
+            File file = new File("D:/file/" +imgName);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }

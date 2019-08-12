@@ -1,11 +1,10 @@
-package com.zzkj.dcsystem.service.impl;
+package com.zzkj.dcsystem.service.serviceimpl;
 
 import com.zzkj.dcsystem.dao.DcGoodsMapper;
 import com.zzkj.dcsystem.dao.DcShopCartGoodsMapper;
 import com.zzkj.dcsystem.dao.DcShopCartMapper;
 import com.zzkj.dcsystem.dto.ShopCartGoodsDto;
-import com.zzkj.dcsystem.entity.DcGoods;
-import com.zzkj.dcsystem.service.IDcShopCartService;
+import com.zzkj.dcsystem.service.DcShopCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ import java.util.List;
  * @date 2019-07-24 16:19
  */
 @Service
-public class DcShopCartServiceImpl implements IDcShopCartService {
+public class DcShopCartServiceImpl implements DcShopCartService {
     @Autowired
     private DcGoodsMapper goodsMapper;
     @Autowired
