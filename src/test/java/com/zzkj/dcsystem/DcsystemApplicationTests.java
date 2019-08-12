@@ -65,13 +65,6 @@ public class DcsystemApplicationTests {
 
     @Autowired
     DcOrdersGoodsMapper dcOrdersGoodsMapper;
-    @Test
-    public void test3(){
-        DcOrders dcOrders = new DcOrders();
-        dcOrders.setOrdersId("05bf2c39-3200-4bad-b037-158c211b42d9");
-        List<DcOrdersGoods> dcOrdersGoods = dcOrdersGoodsMapper.selectDcOrdersGoodsByDcOrders(dcOrders);
-        System.out.println(dcOrdersGoods);
-    }
 
     @Autowired
     DefaultMQProducer defaultMQProducer;
