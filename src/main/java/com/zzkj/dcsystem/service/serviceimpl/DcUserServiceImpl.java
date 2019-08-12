@@ -43,13 +43,15 @@ public class DcUserServiceImpl implements DcUserService {
             DcUser dcUser = new DcUser();
             dcUser.setUserId(uuid);
             dcUser.setOpenId(openid);
-            dcUser.setNickName(data.getNickName());
-            dcUser.setGender(data.getGender());
-            dcUser.setLanguage(data.getLanguage());
-            dcUser.setCity(data.getCity());
-            dcUser.setProvince(data.getProvince());
-            dcUser.setCountry(data.getCountry());
-            dcUser.setAvatarUrl(data.getAvatarUrl());
+            if(data != null){
+                dcUser.setNickName(data.getNickName());
+                dcUser.setGender(data.getGender());
+                dcUser.setLanguage(data.getLanguage());
+                dcUser.setCity(data.getCity());
+                dcUser.setProvince(data.getProvince());
+                dcUser.setCountry(data.getCountry());
+                dcUser.setAvatarUrl(data.getAvatarUrl());
+            }
             dcUserMapper.insertUser(dcUser);
             logger.info("用户插入成功");
         }

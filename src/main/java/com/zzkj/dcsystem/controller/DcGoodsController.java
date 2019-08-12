@@ -112,7 +112,7 @@ public class DcGoodsController {
      * @param dcGoods
      * @return
      */
-    @RequestMapping(value = "deleteGoods")
+    @RequestMapping(value = "/deleteGoods")
     public @ResponseBody List<DcGoods> deleteGoods(DcGoods dcGoods){
         //删除商品
         goodsService.deleteGoodsByGoodsId(dcGoods);
@@ -136,7 +136,7 @@ public class DcGoodsController {
             //获取项目路径
             String contextPath = request.getContextPath();
             //指定文件存放在d盘下
-            File file = new File( "D:/file/" +imgName);
+            File file = new File( "/file/" +imgName);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
@@ -146,7 +146,6 @@ public class DcGoodsController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-//        System.out.println(dcGoods);
             dcGoods.setGoodsImgUrl(contextPath+"/images/"+imgName);
         }
         //插入数据
@@ -182,7 +181,7 @@ public class DcGoodsController {
             //获取项目路径
             String contextPath = request.getContextPath();
             //指定文件存放在d盘下
-            File file = new File("D:/file/" +imgName);
+            File file = new File("/file/" +imgName);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }

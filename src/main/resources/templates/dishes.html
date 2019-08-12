@@ -148,7 +148,7 @@
     <div class="row">
         <div class="col-md-6">
             <h2 class="sub-header">添加菜品</h2>
-            <form id="addDishesFrom" action="http://localhost:8080/dcsystem/addGoods" method="post" enctype="multipart/form-data">
+            <form id="addDishesFrom" action="http://www.98guangzheng.xyz:8080/dcsystem/addGoods" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="goodsName">菜品名</label>
                     <input type="text" v-model="addGoodsName" name="goodsName" class="form-control" id="goodsName" placeholder="此为必填项">
@@ -248,7 +248,7 @@
             },
             methods:{
                 updateGoods(goodsId){
-                    window.location.href = "http://localhost:8080/dcsystem/preUpdateGoods?goodsId="+goodsId;
+                    window.location.href = "http://www.98guangzheng.xyz:8080/dcsystem/preUpdateGoods?goodsId="+goodsId;
                 },
                 selectgoods(){
                     if((!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(this.startPrice)) && this.startPrice !== ""){
@@ -269,7 +269,7 @@
                         var endprice = this.endPrice;
                         var vm = this;
                         $.ajax({
-                            url:"http://localhost:8080/dcsystem/selectGoods",
+                            url:"http://www.98guangzheng.xyz:8080/dcsystem/selectGoods",
                             type:"POST",
                             data:{
                                 goodsName:goodsname,
@@ -299,7 +299,7 @@
                     var vm = this;
                     if(confirm("你确定要删除该商品吗？")){
                         $.ajax({
-                            url:"http://localhost:8080/dcsystem/deleteGoods",
+                            url:"http://www.98guangzheng.xyz:8080/dcsystem/deleteGoods",
                             type:"POST",
                             data:{
                                 goodsId:id
@@ -392,7 +392,7 @@
                     var vm = this;
                     var name = this.typeName;
                     $.ajax({
-                        url:"http://localhost:8080/dcsystem/addDcGoodsType",
+                        url:"http://www.98guangzheng.xyz:8080/dcsystem/addDcGoodsType",
                         type:"POST",
                         data:{typeName:name},
                         success:function (data) {
@@ -417,7 +417,7 @@
                 deletetype(typeId){
                     var vm = this;
                     $.ajax({
-                        url:"http://localhost:8080/dcsystem/deleteType",
+                        url:"http://www.98guangzheng.xyz:8080/dcsystem/deleteType",
                         type:"POST",
                         data:{typeId:typeId},
                         success:function (data) {
@@ -439,14 +439,14 @@
             created() {
                 var vm = this;
                 //页面初始化的时候请求一次服务端的菜品列表
-                axios.post("http://localhost:8080/dcsystem/goodsList")
+                axios.post("http://www.98guangzheng.xyz:8080/dcsystem/goodsList")
                     .then(function (res) {
                         vm.goodsList = res.data;
                     }).catch(function (res) {
                     alert(res+"错误");
                 });
                 //页面初始化的时候请求一次服务端的类别列表
-                axios.post("http://localhost:8080/dcsystem/typeList")
+                axios.post("http://www.98guangzheng.xyz:8080/dcsystem/typeList")
                     .then(function (res) {
                         vm.typeList = res.data;
                     }).catch(function (res) {
@@ -470,7 +470,7 @@
                 //获取类别列表
                 getTypeList(){
                     var vm = this;
-                    axios.post("http://localhost:8080/dcsystem/typeList")
+                    axios.post("http://www.98guangzheng.xyz:8080/dcsystem/typeList")
                         .then(function (res) {
                             vm.typeList = res.data;
                         }).catch(function (res) {
@@ -480,7 +480,7 @@
                 //获取菜品列表
                 getDishesList(){
                     var vm = this;
-                    axios.post("http://localhost:8080/dcsystem/goodsList")
+                    axios.post("http://www.98guangzheng.xyz:8080/dcsystem/goodsList")
                         .then(function (res) {
                             vm.goodsList = res.data;
                         }).catch(function (res) {

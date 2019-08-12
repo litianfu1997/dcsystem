@@ -241,7 +241,7 @@
                     this.$emit("func1",index);
                 },
                 finishOrders(ordersId){
-                    window.location.href = "http://localhost:8080/dcsystem/finishOrders?ordersId="+ordersId;
+                    window.location.href = "http://www.98guangzheng.xyz:8080/dcsystem/finishOrders?ordersId="+ordersId;
                 }
             }
         });
@@ -271,7 +271,7 @@
                     var finishFlag = this.finishFlag;
                     var vm = this;
                     $.ajax({
-                        url:"http://localhost:8080/dcsystem/selectOrders",
+                        url:"http://www.98guangzheng.xyz:8080/dcsystem/selectOrders",
                         type:"POST",
                         data:{
                             linkman:linkman,
@@ -302,7 +302,7 @@
             },
             mounted() {
                 if ('WebSocket' in window) {
-                    this.websock = new WebSocket("ws://localhost:8080/dcsystem/webSocket");
+                    this.websock = new WebSocket("ws://www.98guangzheng.xyz:8080/dcsystem/webSocket");
                     this.initWebSocket();
                 } else {
                     alert('当前浏览器 Not support websocket')
@@ -319,7 +319,7 @@
                     //获取所有订单
                     var vm = this;
                     $.ajax({
-                        url:"http://localhost:8080/dcsystem/getAllOrder",
+                        url:"http://www.98guangzheng.xyz:8080/dcsystem/getAllOrder",
                         type:"POST",
                         success:function (data) {
                             // alert(data);
