@@ -18,6 +18,6 @@
     </select>
 
     <select id="selectDcUserByUserId" resultType="DcUser" parameterType="String">
-        select user_id from dc_user where user_id = #{userId}
+        select * from dc_user where user_id = #{userId}
     </select>
 </mapper>

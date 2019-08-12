@@ -68,6 +68,12 @@ public class DcShopCartController {
         }
         return null;
     }
+
+    /**
+     * 查询某一名用户购物车的所有商品
+     * @param shopCartDto
+     * @return
+     */
     @RequestMapping("/shopCart/selectAllShopCartGoods.action")
     public @ResponseBody
     List<ShopCartGoodsDto> selectAllShopCartGoods(@RequestBody ShopCartDto shopCartDto){
@@ -111,6 +117,11 @@ public class DcShopCartController {
         String shopCartId = shopCartService.selectShopCartIdByUserId(shopCartDto.getUserId());
         boolean updateFlag = shopCartService.updateShopCartGoodsCount(shopCartId, shopCartDto.getGoodsId(), amount, total);
     }
+
+    /**
+     * 删除购物车里的某件商品
+     * @param shopCartDto
+     */
     @RequestMapping("/shopCart/deleteShopCartGoodsById.action")
     public @ResponseBody void deleteShopCartGoodsById(@RequestBody ShopCartDto shopCartDto){
         String shopCartId = shopCartService.selectShopCartIdByUserId(shopCartDto.getUserId());

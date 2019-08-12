@@ -2,6 +2,8 @@ package com.zzkj.dcsystem.config;
 
 import com.zzkj.dcsystem.utils.wxpay.IWXPayDomain;
 import com.zzkj.dcsystem.utils.wxpay.WXPayConfig;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -14,17 +16,29 @@ import java.io.InputStream;
  * @email 1035869369@qq.com
  * @date 2019-07-30 14:05
  */
+@Component
 public  class WxConfig extends WXPayConfig {
     private byte[] certData;
+    @Value("${wx.appId}")
+    private String appId;
+    @Value("${wx.key}")
+    private String key;
+    @Value("${wx.mchId}")
+    private String mchId;
+//    @Value("${wx.certPath}")
+//    private String certPathLs;
+    
+    
 
     public WxConfig() throws Exception {
-        //证书的路径
-        String certPath = "/path/to/apiclient_cert.p12";
-        File file = new File(certPath);
-        InputStream certStream = new FileInputStream(file);
-        this.certData = new byte[(int) file.length()];
-        certStream.read(this.certData);
-        certStream.close();
+//        //证书的路径
+//        String certPath = certPathLs;
+//        File file = new File(certPath);
+//        InputStream certStream = new FileInputStream(file);
+//        this.certData = new byte[(int) file.length()];
+//        certStream.read(this.certData);
+//        certStream.close();
+        getAppID();
     }
     /**
      * 获取 App ID
@@ -33,19 +47,18 @@ public  class WxConfig extends WXPayConfig {
      */
     @Override
     public String getAppID(){
-
-        return "";
+        return appId;
     }
 
 
     /**
      * 获取 Mch ID
-     *
+     *商户号
      * @return Mch ID
      */
     @Override
     public String getMchID() {
-        return "";
+        return mchId;
     }
 
 
@@ -56,7 +69,7 @@ public  class WxConfig extends WXPayConfig {
      */
     @Override
     public String getKey() {
-        return "";
+        return key;
     }
 
 

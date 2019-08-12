@@ -26,4 +26,6 @@ public interface DcUserService {
      * @return 如果是新用户则插入数据库并返回userid,如果用户已存在则直接返回userid
      */
     public String insertUser(RawData data, String openid);
+
+
 }

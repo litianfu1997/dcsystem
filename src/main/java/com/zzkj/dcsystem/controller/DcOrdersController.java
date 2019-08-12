@@ -47,7 +47,12 @@ public class DcOrdersController {
     DefaultMQProducer defaultMQProducer;
 
 //    private Logger logger = LoggerFactory.getLogger(this.getClass());
-  
+
+    /**
+     *插入一条订单
+     * @param ordersGoodsDto
+     * @return
+     */
     @RequestMapping("/order/insertOrder.action")
     public @ResponseBody
     ResponseMessage insertOrder(@RequestBody OrdersGoodsDto ordersGoodsDto){
@@ -130,7 +135,6 @@ public class DcOrdersController {
 
     @RequestMapping("/selectOrders")
     public @ResponseBody List<DcOrders> selectOrders(DcOrdersQueryVo queryVo){
-
         List<DcOrders> list = dcOrdersService.selectOrders(queryVo);
         return list;
 
